@@ -7,7 +7,10 @@ Documentation goes here.
 
 ```
 module "mymodule" {
-    source          = "source goes here"
+	source          = "source goes here"
+	
+	# vars go here
+
 }
 ```
 
@@ -15,20 +18,28 @@ module "mymodule" {
 
 ### Development
 
-Pull the latest master.
+Checkout master and pull the latest commits,
 
-```git pull```
+```bash
+git checkout master
+git pull
+```
 
 Append ``feature/`` to all new branches.
 
-```git checkout -b feature/newthing```
+```bash
+git checkout -b feature/newthing
+```
 
-Jenkins will run on PR requests from ``feature/*`` to ``master``. (Future State)
+(Future State) 
+Jenkins will run on PR requests from ``feature/*`` to ``master``. 
+NOTE: we could turn on SCM polling to accomplish this, but would be expensive.
+(Future State)
 
 ### Pull Request Checklist
 
-- [] Open PR to master
-- [] Changelog
+- [] Update Changelog
+- [] Open PR into ``master`` branch
 - [] Ensure tests are passing in Jenkins
 - [] Get approval from lead
 - [] Tag latest commit with new version
