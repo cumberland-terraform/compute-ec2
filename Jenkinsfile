@@ -21,7 +21,7 @@ pipeline {
 				sh '''
 					wget -q https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_${OS_ARCH}.zip
         			unzip -o terraform_${TF_VER}_linux_${OS_ARCH}.zip
-        			cp -rf terraform /usr/local/bin/
+        			sudo cp -rf terraform /usr/local/bin/
         			terraform --version
 
 					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sh
