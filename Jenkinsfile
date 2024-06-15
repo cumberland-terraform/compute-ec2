@@ -1,6 +1,8 @@
 eter_compute_repo='https://mdt.global@source.mdthink.maryland.gov/scm/et/mdt-eter-aws-core-compute.git'
 
 pipeline {
+	agent { label 'ubuntu-jenkins_py311_ans216' }
+
 	/**
 	stage ('checkoutCode') {
   		steps {
@@ -17,7 +19,15 @@ pipeline {
 			])  
 		}
 	}
-	*/
+	*/	
+	stage ('cleanWorkSpace') {
+		steps { 
+			cleanWs() 
+		}
+	}
+	
+	checkout scm
+
 	state ('Dependencies') {
 		steps {
 			echo 'Here is a pipeline step'
