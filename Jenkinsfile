@@ -20,18 +20,21 @@ pipeline {
 		}
 	}
 	*/	
-	stage ('cleanWorkSpace') {
-		steps { 
-			cleanWs() 
-		}
-	}
-	
-	checkout scm
+	stages {
 
-	state ('Dependencies') {
-		steps {
-			echo 'Here is a pipeline step'
-			sh 'ls -al'
+		stage ('cleanWorkSpace') {
+			steps { 
+				cleanWs() 
+			}
+		}
+	
+		checkout scm
+
+		state ('Dependencies') {
+			steps {
+				echo 'Here is a pipeline step'
+				sh 'ls -al'
+			}
 		}
 	}
 }
