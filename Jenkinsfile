@@ -2,6 +2,11 @@
 pipeline {
 	agent { label 'jenkins-slave-java' }
 	
+	environment { 
+		TF_VER = '1.8.5'
+		OS_ARCH = "amd64" 
+	}
+
 	stages {
 
 		stage ('cleanWorkSpace') {
@@ -14,13 +19,11 @@ pipeline {
 			steps {
 				echo '----- Installing Dependencies'
 				sh '''
-					sudo apt-get update -y
-					sudo apt-get install -y gnupg software-properties-common
-					echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
-						https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
-						sudo tee /etc/apt/sources.list.d/hashicorp.list
-					sudo apt update -y
-					sudo apt-get install terraform
+					wget -q https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_${OS_ARCH}.zip
+        			unzip -o terraform_${TF_VER}_linux_${OS_ARCH}.zip
+        			cp -rf terraform /usr/local/bin/
+        			terraform --version
+
 					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sh
 				'''
 			}
