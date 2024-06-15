@@ -1,28 +1,7 @@
-eter_compute_repo='https://mdt.global@source.mdthink.maryland.gov/scm/et/mdt-eter-aws-core-compute.git'
 
 pipeline {
-	// agent any
-	
-	// agent { label 'ubuntu-jenkins_py311_ans216' }
-
 	agent { label 'jenkins-slave-java' }
-	/**
-	stage ('checkoutCode') {
-  		steps {
-    			checkout([
-				$class: 'GitSCM', 
-				branches: [[name: 'master']], 
-				doGenerateSubmoduleConfigurations: false, 
-				extensions: [], 
-				submoduleCfg: [], 
-				userRemoteConfigs: [[
-					credentialsId: '472b8d26-00b5-440a-b49c-f72d1cb1d798', 
-					url: eter_compute_repo
-				]]
-			])  
-		}
-	}
-	*/	
+	
 	stages {
 
 		stage ('cleanWorkSpace') {
@@ -33,9 +12,29 @@ pipeline {
 	
 		stage ('Dependencies') {
 			steps {
-				checkout scm
-				echo 'Here is a pipeline step'
-				sh 'ls -al'
+				echo '----- Installing Dependencies'
+				sh '''
+					sudo apt-get update -y
+					sudo apt-get install -y gnupg software-properties-common
+					echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] \
+						https://apt.releases.hashicorp.com $(lsb_release -cs) main" | \
+						sudo tee /etc/apt/sources.list.d/hashicorp.list
+					sudo apt update -y
+					sudo apt-get install terraform
+					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sh
+				'''
+			}
+		}
+
+		stage ('Lint') {
+			steps {
+				echo '----- Linting'
+			}
+		}
+
+		stage ('Test') {
+			steps {
+				echo '---- Testing'
 			}
 		}
 	}
