@@ -28,10 +28,9 @@ pipeline {
 			}
 		}
 	
-		checkout scm
-
-		state ('Dependencies') {
+		stage ('Dependencies') {
 			steps {
+				checkout scm
 				echo 'Here is a pipeline step'
 				sh 'ls -al'
 			}
