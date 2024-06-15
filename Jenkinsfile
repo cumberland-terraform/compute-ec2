@@ -1,7 +1,9 @@
 eter_compute_repo='https://mdt.global@source.mdthink.maryland.gov/scm/et/mdt-eter-aws-core-compute.git'
 
 pipeline {
-	agent { label 'ubuntu-jenkins_py311_ans216' }
+	agent any
+	
+	// agent { label 'ubuntu-jenkins_py311_ans216' }
 
 	/**
 	stage ('checkoutCode') {
