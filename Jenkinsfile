@@ -24,7 +24,7 @@ pipeline {
         			sudo cp -rf terraform /usr/local/bin/
         			terraform --version
 
-					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | sh
+					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 				'''
 			}
 		}
