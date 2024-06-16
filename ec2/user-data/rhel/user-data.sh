@@ -23,11 +23,3 @@ apt-get install -y \
     docker-ce \
     docker-ce-cli \
     containerd.io 
-    
-### ECR LOGIN
-echo "Logging into AWS ECR..."
-aws ecr get-login-password \
-    --region ${AWS_DEFAULT_REGION} |\
-    docker login \
-        --username AWS \
-        --password-stdin ${AWS_ACCOUNT_ID}.dkr.ecr.${AWS_DEFAULT_REGION}.amazonaws.com
