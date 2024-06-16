@@ -1,8 +1,9 @@
 variable "platform" {
   description                           = "Platform configuration for host deployment."
   type                                  = object({
-    aws_account                         = string
+    aws_id                              = string
     aws_region                          = string 
+    account                             = string
     agency                              = string
     program                             = string
     env                                 = string
@@ -32,22 +33,16 @@ variable "instance_config" {
     description                         = "Configuration for the host environment."
     type = object({
         instance_profile                = string
-        key_name                        = string
-        type                            = string
-        public                          = bool
-
+        suffix                          = string
+        type                            = optional(string, "t3.xlarge")
+        key_name                        = optional(string, null)
+        public                          = optional(bool, false)
     })
-    default = {
-        instance_profile                = "AWSRoleforEC2"
-        key_name                        = null
-        type                            = "t3.xlarge"
-        public                          = true
-    }
 }
 
 variable "operating_system" {
   type                                  = string
-  description                           = "some test value"
+  description                           = "Type of machine to deploy."
 
   validation {
     condition                           = contains(["RHEL", "WINDOWS"], var.operating_system)

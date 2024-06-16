@@ -1,25 +1,38 @@
 locals {
-    ec2_tags            = {
-                            Organization    = "mdthink"
-                            Agency          = "mdh"
-                            Project         = "aws-ec2-compute"
-                            Owned           = "grant.moore@maryland.gov"
-                            Service         = "ec2"
-                        }
-    kms_tags            = {
-                            Organization    = "mdthink"
-                            Team            = "mdh"
-                            Project         = "aws-ec2-compute"
-                            Owned           = "grant.moore@maryland.gov"
-                            Service         = "kms"
-                        }
+    tags                ={
+      Name              = "${join("-", [
+                            module.lookup_data.service_abbr,
+                            module.lookup_data.agency_oneletterkey,
+                            module.lookup_data.account_threeletterkey,
+                            module.lookup_data.program_abbr,
+                            module.lookup_data.region_twoletterkey,
+                            module.lookup_data.account_env_threeletterkey,
+                            var.instance_config.suffix]
+                        )}",
+      CreationDate      = formatdate("YYYY-MM-DD", timestamp())
+      Account           = var.platform.account
+      Environment       = var.platform.account_env
+      Agency            = var.platform.agency
+      Program           = var.platform.program
+      Region            = var.platform.aws_region
+      "PCA Code"        = var.platform.pca
+    }
+
     ssh_key_algorithm   = "RSA"
     ssh_key_bits        = 4096
-    name_schema         = ""
+
+    prefix              = "${join("-", [
+                            module.lookup_data.service_abbr,
+                            module.lookup_data.agency_oneletterkey,
+                            module.lookup_data.account_threeletterkey,
+                            module.lookup_data.program_abbr]
+                        )}"
+
     amis                = {
-        RHEL            = "ami goes here"
-        WINDOWS         = "ami goes here"
+        RHEL            = "ami id goes here"
+        WINDOWS         = "ami id goes here"
     }
+
     os_prefix           = "${path.module}/${lower(var.operating_system)}/user-data"
     userdata_path       = var.operating_system == "RHEL" ? "${local.os_prefix}.sh" : "${local.os_prefix}.bat"
     userdata_config     = var.operating_system == "RHEL" ? {
