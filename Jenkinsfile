@@ -14,17 +14,31 @@ pipeline {
 				cleanWs() 
 			}
 		}
-	
+/*
+Check for Terraform and TFLint before install
+to reduce runtime. Print versions of each for
+documentation and pipeline debugging
+*/
 		stage ('Dependencies') {
 			steps {
-				echo '----- Installing Dependencies'
+				echo '----- Confirming Dependencies'
 				sh '''
-					wget -q https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_${OS_ARCH}.zip
-        			unzip -o terraform_${TF_VER}_linux_${OS_ARCH}.zip
-        			sudo cp -rf terraform /usr/local/bin/
-        			terraform --version
-
-					curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+				    if ! command -V terraform &> /dev/null
+					then
+					    wget -q https://releases.hashicorp.com/terraform/${TF_VER}/terraform_${TF_VER}_linux_${OS_ARCH}.zip
+        			    unzip -o terraform_${TF_VER}_linux_${OS_ARCH}.zip
+        			    sudo cp -rf terraform /usr/local/bin/
+        			    terraform --version
+					else
+					    terraform --version
+					fi
+					if ! command -V tflint &> /dev/null
+					then
+					    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
+						tflint --version
+					else
+					    tflint --version
+					fi
 				'''
 			}
 		}
