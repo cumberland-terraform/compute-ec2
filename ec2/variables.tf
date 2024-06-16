@@ -1,82 +1,56 @@
-variable "agency" {
-  description = "Agency name"
-  type        = string
+variable "platform" {
+  description                           = "Platform configuration for host deployment."
+  type                                  = object({
+    aws_account                         = string
+    aws_region                          = string 
+    agency                              = string
+    program                             = string
+    env                                 = string
+    pca                                 = string
+  })
 }
 
-variable "account" {
-  description = "The aws account"
-  type        = string
+variable "source_ips" {
+    description                         = "IPs to whitelist for remote ingress into the host. These IPs will be added to the security group around the host."
+    type                                = list(string)
+    sensitive                           = true
 }
 
-variable "account_env" {
-  description = "Environment at an account level"
-  type        = string
+
+variable "vpc_config" {
+    description                         = "VPC configuration for host deployment."
+    type = object({
+        id                              = string
+        subnet_id                       = string
+        security_group_ids              = list(string)
+    })
+    sensitive                           = true
 }
 
-variable "aws_region" {
-  description = "The aws region"
-  type        = string
+
+variable "instance_config" {
+    description                         = "Configuration for the host environment."
+    type = object({
+        instance_profile                = string
+        key_name                        = string
+        type                            = string
+        public                          = bool
+
+    })
+    default = {
+        instance_profile                = "AWSRoleforEC2"
+        key_name                        = null
+        type                            = "t3.xlarge"
+        public                          = true
+    }
 }
 
-variable "program" {
-  description = "The program name"
-  type        = string
-}
+variable "operating_system" {
+  type                                  = string
+  description                           = "some test value"
 
-variable "suffix" {
-  description = "The suffix name for the ec2 instance"
-  type        = string
-}
-
-variable "ami" {
-  description = "The ami for the ec2 instance"
-  type        = string
-}
-
-variable "instance_type" {
-  description = "The instance type"
-  type        = string
-}
-
-variable "ssh_key_name" {
-  description = "The ssh_key_name for the ec2 instance"
-  type        = string
-}
-
-variable "sg_ids" {
-  description = "The security group ids for the ec2 instance"
-  type        = list(string)
-}
-
-variable "user_data" {
-  description = "The booststrap script for the ec2 instance"
-  type        = string
-  default     = null
-}
-
-variable "iam_instance_profile" {
-  description = "The instance profile for the ec2 instance"
-  type        = string
-  default     = null
-}
-
-variable "subnet_id" {
-  description = "The subnet Id for the ec2 instance"
-  type        = string
-}
-
-variable "associate_public_ip_address" {
-  description = "The public IP address for the ec2 instance"
-  type        = bool
-}
-
-variable "pca_code" {
-  description = "The PCA code for the instance tag"
-  type        = string
-}
-
-variable "tags" {
-  description = "Tags attached to the nat gateway"
-  type        = map(string)
-  default     = {}
+  validation {
+    condition                           = contains(["RHEL", "WINDOWS"], var.operating_system)
+    error_message                       = "Valid values: (RHEL, WINDOWS)."
+  } 
 }
