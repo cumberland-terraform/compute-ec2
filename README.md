@@ -1,5 +1,6 @@
 # Enterprise Terraform 
 ## AWS Core Compute
+### EC2
 
 Documentation goes here.
 
@@ -7,7 +8,7 @@ Documentation goes here.
 
 ```
 module "mymodule" {
-	source          = "source goes here"
+	source          = "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute.git"
 	
 	# vars go here
 
