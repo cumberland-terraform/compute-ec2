@@ -1,10 +1,10 @@
-
 pipeline {
 	agent { label 'jenkins-slave-java' }
 	
 	environment { 
 		TF_VER = '1.8.5'
-		OS_ARCH = "amd64" 
+		OS_ARCH = 'amd64' 
+		EMAIL_LIST = 'grant.moore@maryland.gov,aaron.ramirez@maryland.gov'
 	}
 
 	stages {
@@ -14,11 +14,11 @@ pipeline {
 				cleanWs() 
 			}
 		}
-/*
-Check for Terraform and TFLint before install
-to reduce runtime. Print versions of each for
-documentation and pipeline debugging
-*/
+		/*
+		Check for Terraform and TFLint before install
+		to reduce runtime. Print versions of each for
+		documentation and pipeline debugging
+		*/
 		stage ('Dependencies') {
 			steps {
 				echo '----- Confirming Dependencies'
@@ -55,4 +55,17 @@ documentation and pipeline debugging
 			}
 		}
 	}
+
+	post {
+        failure {
+            emailext body: 'Check console output at $BUILD_URL to view the results. \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG_REGEX,regex="ERROR", escapeHtml=false}',
+            to:   EMAIL_LIST,
+            subject: 'Build failed in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        }
+        success {
+            emailext body: 'Check console output at $BUILD_URL to view the results.  \n\n ${CHANGES} \n\n -------------------------------------------------- \n${BUILD_LOG, maxLines=100, escapeHtml=false}',
+            to:   EMAIL_LIST,
+            subject: 'Build succeeded in Jenkins: $PROJECT_NAME - #$BUILD_NUMBER'
+        }
+    }
 }
