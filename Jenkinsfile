@@ -1,5 +1,7 @@
 pipeline {
-	agent { label 'jenkins-slave-java' }
+	agent { 
+		label 'jenkins-slave-java' 
+	}
 	
 	environment { 
 		TF_VER = '1.8.5'
