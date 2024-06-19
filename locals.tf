@@ -11,7 +11,7 @@ locals {
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = var.platform.account
-      Environment       = var.platform.account_env
+      Environment       = var.platform.env
       Agency            = var.platform.agency
       Program           = var.platform.program
       Region            = var.platform.aws_region
