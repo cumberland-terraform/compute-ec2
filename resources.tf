@@ -54,7 +54,7 @@ resource "aws_security_group_rule" "remote_access_egress" {
     to_port                     = 0
     protocol                    = "-1"
     cidr_blocks                 = [ "0.0.0.0/0" ]
-    security_group_id           = aws_security_group.remote_access_sg.id
+    security_group_id           = aws_security_group.remote_access_sg[count.index].id
 }
 
 
@@ -91,7 +91,7 @@ resource "aws_instance" "instance" {
                                     local.userdata_config
                                 )
     vpc_security_group_ids      = var.instance_config.provision_sg ? concat(
-                                    [ aws_security_group.remote_access_sg.id ],
+                                    [ aws_security_group.remote_access_sg[0].id ],
                                     var.vpc_config.security_group_ids
                                 ) : (
                                     var.vpc_config.security_group_ids
