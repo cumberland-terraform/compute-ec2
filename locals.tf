@@ -35,7 +35,7 @@ locals {
         WINDOWS         = "ami id goes here"
     }
 
-    os_prefix           = "${path.module}/${lower(var.instance_config.operating_system)}/user-data"
+    os_prefix           = "${path.module}/user-data/${lower(var.instance_config.operating_system)}/user-data"
     userdata_path       = var.instance_config.operating_system == "RHEL" ? "${local.os_prefix}.sh" : "${local.os_prefix}.bat"
     userdata_config     = var.instance_config.operating_system == "RHEL" ? {
         # RHEL USERDATA CONFIGURATION
