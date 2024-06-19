@@ -5,5 +5,5 @@ data "aws_region" "current" {}
 
 
 data "aws_vpc" "vpc" {
-    id                                                  = var.vpc_config.id
+    id                  = var.vpc_config.id
 }

@@ -1,5 +1,5 @@
 resource "aws_key_pair" "ssh_key" {
-    count                        = var.bastion_config.key_name == null ? 1 : 0
+    count                        = var.instance_config.key_name == null ? 1 : 0
 
     key_name                     = "${local.prefix}_key"
     public_key                   = tls_private_key.rsa[0].public_key_openssh
@@ -7,7 +7,7 @@ resource "aws_key_pair" "ssh_key" {
 
 
 resource "tls_private_key" "rsa" {
-    count                        = var.bastion_config.key_name == null ? 1 : 0
+    count                        = var.instance_config.key_name == null ? 1 : 0
 
     algorithm                    = local.ssh_key_algorithm
     rsa_bits                     = local.ssh_key_bits
@@ -15,7 +15,7 @@ resource "tls_private_key" "rsa" {
 
 
 resource "local_file" "tf-key" {
-    count                       = var.bastion_config.key_name == null ? 1 : 0
+    count                       = var.instance_config.key_name == null ? 1 : 0
 
     content                     = tls_private_key.rsa[0].private_key_pem
     filename                    = "${path.root}/keys/${local.prefix}_key"
@@ -23,6 +23,8 @@ resource "local_file" "tf-key" {
 
 
 resource "aws_security_group" "remote_access_sg" {
+    count                       = var.instance_config.provision_sg ? 1 : 0
+
     name                        = "${local.prefix}-remote-access"
     description                 = "${local.prefix} security group"
     vpc_id                      = var.vpc_config.id
@@ -31,53 +33,56 @@ resource "aws_security_group" "remote_access_sg" {
 
 
 resource "aws_security_group_rule" "remote_access_ingress" {
-    description                 = "Restrict access to IP whitelist and VPC CIDR block"
+    count                       = var.instance_config.provision_sg ? 1 : 0
+
+    description                 = "Restrict access to VPC CIDR block"
     type                        = "ingress"
     from_port                   = 0
     to_port                     = 0
     protocol                    = "-1"
-    cidr_blocks                 = concat(
-                                    var.source_ips,
-                                    [ data.aws_vpc.vpc.cidr_block ]
-                                )
-    security_group_id           = aws_security_group.remote_access_sg.id
+    cidr_blocks                 = [ data.aws_vpc.vpc.cidr_block ]
+    security_group_id           = aws_security_group.remote_access_sg[count.index].id
 } 
 
 
 resource "aws_security_group_rule" "remote_access_egress" {
+    count                       = var.instance_config.provision_sg ? 1 : 0
+
     description                 = "Allow all outgoing traffic"
     type                        = "egress"
     from_port                   = 0
     to_port                     = 0
     protocol                    = "-1"
-    cidr_blocks                 = [
-                                    "0.0.0.0/0"
-                                ]
+    cidr_blocks                 = [ "0.0.0.0/0" ]
     security_group_id           = aws_security_group.remote_access_sg.id
 }
 
 
 resource "aws_eip" "bastion_ip" {
-    count                       = var.bastion_config.public ? 1 : 0
+    count                       = var.instance_config.public ? 1 : 0
     tags                        = local.tags
 }
 
 
 resource "aws_eip_association" "eip_assoc" {
-    count                       = var.bastion_config.public ? 1 : 0
+    count                       = var.instance_config.public ? 1 : 0
 
-    instance_id                 = aws_instance.bastion_host.id
+    instance_id                 = aws_instance.instance.id
     allocation_id               = aws_eip.bastion_ip[0].id
 }
 
-resource "aws_instance" "bastion_host" {
+resource "aws_instance" "instance" {
 
-    ami                         = var.bastion_config.ami
-    associate_public_ip_address = var.bastion_config.public
+    ami                         = local.amis[var.instance_config.operating_system]
+    associate_public_ip_address = var.instance_config.public
     ebs_optimized               = true
-    key_name                    = var.bastion_config.key_name == null ? aws_key_pair.ssh_key[0].key_name : var.bastion_config.key_name
-    iam_instance_profile        = var.bastion_config.instance_profile
-    instance_type               = var.bastion_config.type
+    key_name                    = var.instance_config.key_name == null ? (
+                                    aws_key_pair.ssh_key[0].key_name 
+                                ) : ( 
+                                    var.instance_config.key_name
+                                )
+    iam_instance_profile        = var.instance_config.instance_profile
+    instance_type               = var.instance_config.type
     monitoring                  = true 
     subnet_id                   = var.vpc_config.subnet_id
     tags                        = local.tags
@@ -85,10 +90,12 @@ resource "aws_instance" "bastion_host" {
                                     local.userdata_path,
                                     local.userdata_config
                                 )
-    vpc_security_group_ids      = concat(
+    vpc_security_group_ids      = var.instance_config.provision_sg ? concat(
                                     [ aws_security_group.remote_access_sg.id ],
                                     var.vpc_config.security_group_ids
-                                )                                     
+                                ) : (
+                                    var.vpc_config.security_group_ids
+                                )                                 
 
     metadata_options {
         http_endpoint           = "enabled"
