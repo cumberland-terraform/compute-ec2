@@ -28,6 +28,8 @@ locals {
                             module.lookup_data.program_abbr]
                         )}"
 
+    # TODO: these are the AMI ids from the test account! 
+    #       need to query caller account based on tags to retrieve ids!
     amis                = {
         RHEL            = "ami id goes here"
         WINDOWS         = "ami id goes here"

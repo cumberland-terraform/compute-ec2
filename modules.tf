@@ -4,6 +4,6 @@ module "lookup_data" {
   lookupagency          = var.platform.agency
   lookupawsregion       = var.platform.aws_region
   lookupprogram         = var.platform.program
-  lookupaccountenv      = var.platform.account_env
+  lookupaccountenv      = var.platform.env
   lookupaccount         = var.platform.account
 }
