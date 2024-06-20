@@ -57,10 +57,10 @@ locals {
     os_prefix           = "${path.module}/user-data/${lower(var.instance_config.operating_system)}/user-data"
     userdata_path       = strcontains(var.instance_config.operating_system, "RHEL") ? (
         # RHEL user-data EXTENSION
-        "${local.os_prefix}.sh" 
+        "${path.module}/user-data/rhel/user-data.sh" 
     ) : (
         # WINDOWS user-data EXTENSION
-        "${local.os_prefix}.ps1"
+        "${path.module}/user-data/windows/user-data.ps1" 
     )
     userdata_config     = strcontains(var.instance_config.operating_system, "RHEL") ? {
         # RHEL USERDATA CONFIGURATION
