@@ -1,7 +1,8 @@
 variable "platform" {
   description                           = "Platform configuration for host deployment."
   type                                  = object({
-    aws_id                              = string
+    core_aws_id                         = string
+    tenant_aws_id                       = string
     aws_region                          = string 
     account                             = string
     agency                              = string
