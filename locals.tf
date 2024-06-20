@@ -36,7 +36,7 @@ locals {
     ami_filters                     = strcontains(var.instance_config.operating_system, "RHEL") ? [
         {
             "key"               = "tag:OS",
-            "value"             = var.instance_config.operating_system
+            "value"             = [ var.instance_config.operating_system ]
         },
         {
             "key"               = "tag:Application"
@@ -45,7 +45,7 @@ locals {
     ] : [
         {
             "key"               = "tag:OS",
-            "value"             = var.instance_config.operating_system
+            "value"             = [ var.instance_config.operating_system ]
         },
         {
             "key"               = "tag:Purpose"
