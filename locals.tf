@@ -28,6 +28,21 @@ locals {
                             module.lookup_data.program_abbr]
                         )}"
 
+    # These are extra filters that have to be added to the AMI data query to ensure the results
+    #   returns are unique.
+    ami_filters                     = strcontains(var.instance_config.operating_system, "RHEL") ? [
+        {
+            "key"               = "tag:Application"
+            "value"             =  [ "Base AMI" ]
+        }
+    ] : [
+        {
+            "key"               = "tag:Purpose"
+            "value"             = [ "*Baseline*" ]
+        }
+    ]
+
+
     os_prefix           = "${path.module}/user-data/${lower(var.instance_config.operating_system)}/user-data"
     userdata_path       = strcontains(var.instance_config.operating_system, "RHEL") ? (
         # RHEL user-data EXTENSION
