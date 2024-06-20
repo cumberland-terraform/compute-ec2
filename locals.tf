@@ -28,16 +28,15 @@ locals {
                             module.lookup_data.program_abbr]
                         )}"
 
-    # TODO: these are the AMI ids from the test account! 
-    #       need to query caller account based on tags to retrieve ids!
-    amis                = {
-        RHEL            = "ami id goes here"
-        WINDOWS         = "ami id goes here"
-    }
-
     os_prefix           = "${path.module}/user-data/${lower(var.instance_config.operating_system)}/user-data"
-    userdata_path       = var.instance_config.operating_system == "RHEL" ? "${local.os_prefix}.sh" : "${local.os_prefix}.bat"
-    userdata_config     = var.instance_config.operating_system == "RHEL" ? {
+    userdata_path       = strcontains(var.instance_config.operating_system, "RHEL") ? (
+        # RHEL user-data EXTENSION
+        "${local.os_prefix}.sh" 
+    ) : (
+        # WINDOWS user-data EXTENSION
+        "${local.os_prefix}.ps1"
+    )
+    userdata_config     = strcontains(var.instance_config.operating_system, "RHEL") ? {
         # RHEL USERDATA CONFIGURATION
         AWS_DEFAULT_REGION  = "${data.aws_region.current.name}"
         AWS_ACCOUNT_ID      = "${data.aws_caller_identity.current.account_id}"

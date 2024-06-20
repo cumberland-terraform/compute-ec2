@@ -72,8 +72,7 @@ resource "aws_eip_association" "eip_assoc" {
 }
 
 resource "aws_instance" "instance" {
-
-    ami                         = local.amis[var.instance_config.operating_system]
+    ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.instance_config.public
     ebs_optimized               = true
     key_name                    = var.instance_config.key_name == null ? (

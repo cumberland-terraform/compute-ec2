@@ -35,7 +35,15 @@ variable "instance_config" {
   })
 
   validation {
-    condition                           = contains(["RHEL", "WINDOWS"], var.instance_config.operating_system)
-    error_message                       = "Valid values: (RHEL, WINDOWS)."
+    condition                           = contains(
+      [
+        "RHEL7",
+        "RHEL8",
+        "Windows2012R2",
+        "Windows2016",
+        "Windows2019",
+        "Windows2022"
+      ], var.instance_config.operating_system)
+    error_message                       = "Valid values: (RHEL7, RHEL8, Windows2012R2, Windows2016, Windows2019, Windows2022)."
   } 
 }
