@@ -10,17 +10,13 @@ locals {
                             var.instance_config.suffix]
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
-      Account           = var.platform.account
-      Environment       = module.lookup_data.account_threeletterkey
+      Account           = module.lookup_data.account_threeletterkey
+      Environment       = module.lookup_data.env_twoletterkey
       Agency            = module.lookup_data.agency_oneletterkey
       Program           = module.lookup_data.program_key
       Region            = module.lookup_data.region_twoletterkey
       "PCA Code"        = var.platform.pca
     }
-
-    ssh_key_algorithm   = "RSA"
-    ssh_key_bits        = 4096
-
     prefix              = "${join("-", [
                             module.lookup_data.service_abbr,
                             module.lookup_data.agency_oneletterkey,
@@ -28,12 +24,12 @@ locals {
                             module.lookup_data.program_abbr]
                         )}"
 
+    ssh_key_algorithm   = "RSA"
+    ssh_key_bits        = 4096
+
     # These are extra filters that have to be added to the AMI data query to ensure the results
-    #   returns are unique.
-    # TODO: this is the ideal way of querying the AMI ids. The idea is we should be able to pull
-    #       AMI from target account using tags. However, the current build process builds AMI in
-    #       the CORE account and then shares them with child accounts. 
-    ami_filters                     = strcontains(var.instance_config.operating_system, "RHEL") ? [
+    #   returns are unique
+    ami_filters                 = strcontains(var.instance_config.operating_system, "RHEL") ? [
         {
             "key"               = "tag:OS",
             "value"             = [ var.instance_config.operating_system ]
