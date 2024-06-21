@@ -11,7 +11,7 @@ locals {
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = module.lookup_data.account_threeletterkey
-      Environment       = module.lookup_data.env_oneletterkey
+      Environment       = module.lookup_data.account_env_twoletterkey
       Agency            = module.lookup_data.agency_oneletterkey
       Program           = module.lookup_data.program_key
       Region            = module.lookup_data.region_twoletterkey
