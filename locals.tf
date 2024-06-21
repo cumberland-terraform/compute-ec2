@@ -11,10 +11,10 @@ locals {
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = var.platform.account
-      Environment       = var.platform.env
-      Agency            = var.platform.agency
-      Program           = var.platform.program
-      Region            = var.platform.aws_region
+      Environment       = module.lookup_data.account_threeletterkey
+      Agency            = module.lookup_data.agency_oneletterkey
+      Program           = module.lookup_data.program_key
+      Region            = module.lookup_data.region_twoletterkey
       "PCA Code"        = var.platform.pca
     }
 
