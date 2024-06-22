@@ -11,11 +11,15 @@ locals {
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = module.lookup_data.account_threeletterkey
-      Environment       = module.lookup_data.account_env_twoletterkey
+      Environment       = module.lookup_data.account_env_fourletterkey
       Agency            = module.lookup_data.agency_oneletterkey
       Program           = module.lookup_data.program_key
       Region            = module.lookup_data.region_twoletterkey
       "PCA Code"        = var.platform.pca
+      AutoBackup        = var.instance_config.auto_backup
+      Schedule          = var.instance_config.schedule
+      PrimaryContact    = var.instance_config.contact
+      NewBuild          = var.instance_config.new_build
     }
     prefix              = "${join("-", [
                             module.lookup_data.service_abbr,

@@ -29,6 +29,15 @@ variable "instance_config" {
     instance_profile                    = string
     suffix                              = string
     operating_system                    = string
+    ## The next four arguments are used to template EC2 tags
+    # PRIMARY CONTACT: name of team member who is responsible for instance!
+    contact                             = string
+    # TODO: discover purpose of this tag
+    schedule                            = string
+    # TODO: discover purpose of this tag
+    new_build                           = bool
+    # TODO: discover purpose of this tag
+    auto_backup                         = bool
     type                                = optional(string, "t3.xlarge")
     key_name                            = optional(string, null)
     public                              = optional(bool, false)
