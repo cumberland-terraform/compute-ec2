@@ -64,6 +64,14 @@ pipeline {
 			}
 		}
 
+		stage ('Sec Scanning')
+		    steps {
+				echo '----- Security and Misconfiguration scanning'
+				sh '''
+				    tfsec
+				'''
+			}
+
 		stage ('Test') {
 			steps {
 				echo '---- Testing'
