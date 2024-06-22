@@ -32,7 +32,7 @@ locals {
     ssh_key_bits        = 4096
 
     # These are extra filters that have to be added to the AMI data query to ensure the results
-    #   returns are unique
+    #   returned are unique
     ami_filters                 = strcontains(var.instance_config.operating_system, "RHEL") ? [
         {
             "key"               = "tag:OS",
@@ -40,7 +40,7 @@ locals {
         },
         {
             "key"               = "tag:Application"
-            "value"             =  [ "Base AMI" ]
+            "value"             =  [ "Base AMI" ] # sure would be nice if windows and rhel had consistent tags!
         }
     ] : [
         {
@@ -53,8 +53,6 @@ locals {
         }
     ]
 
-
-    os_prefix           = "${path.module}/user-data/${lower(var.instance_config.operating_system)}/user-data"
     userdata_path       = strcontains(var.instance_config.operating_system, "RHEL") ? (
         # RHEL user-data EXTENSION
         "${path.module}/user-data/rhel/user-data.sh" 
