@@ -1,14 +1,17 @@
 locals {
     tags                ={
-      Name              = "${join("-", [
-                            module.lookup_data.service_abbr,
-                            module.lookup_data.agency_oneletterkey,
-                            module.lookup_data.account_threeletterkey,
-                            module.lookup_data.program_abbr,
-                            module.lookup_data.region_twoletterkey,
-                            module.lookup_data.account_env_threeletterkey,
-                            var.ec2_config.suffix]
-                        )}",
+      Name              = join(
+                            "-", 
+                            [
+                                module.lookup_data.service_abbr,
+                                module.lookup_data.agency_oneletterkey,
+                                module.lookup_data.account_threeletterkey,
+                                module.lookup_data.program_abbr,
+                                module.lookup_data.region_twoletterkey,
+                                module.lookup_data.account_env_threeletterkey,
+                                var.ec2_config.suffix
+                            ]
+                        )
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = module.lookup_data.account_threeletterkey
       Environment       = module.lookup_data.account_env_fourletterkey
@@ -22,12 +25,15 @@ locals {
       NewBuild          = var.ec2_config.new_build
     }
     prefix              = lower(
-                            "${join("-", [
-                                module.lookup_data.service_abbr,
-                                module.lookup_data.agency_oneletterkey,
-                                module.lookup_data.account_threeletterkey,
-                                module.lookup_data.program_abbr]
-                            )}"
+                            join(
+                                "-", 
+                                [
+                                    module.lookup_data.service_abbr,
+                                    module.lookup_data.agency_oneletterkey,
+                                    module.lookup_data.account_threeletterkey,
+                                    module.lookup_data.program_abbr
+                                ]
+                            )
                         )
 
     ssh_key_algorithm   = "RSA"
