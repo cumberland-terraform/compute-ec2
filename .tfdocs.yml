@@ -1,10 +1,5 @@
 formatter: "markdown table"
 
-sections:
-  hide:
-    - providers
-    - resources
-
 output:
   file: EC2.md
   mode: inject
