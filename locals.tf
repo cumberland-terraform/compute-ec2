@@ -31,6 +31,9 @@ locals {
     ssh_key_algorithm   = "RSA"
     ssh_key_bits        = 4096
 
+    conditions                      = {
+        provision_key               = var.rds_config.key_name == null
+    }
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                 = strcontains(var.instance_config.operating_system, "RHEL") ? [

@@ -7,3 +7,12 @@ module "lookup_data" {
   lookupaccountenv      = var.platform.env
   lookupaccount         = var.platform.account
 }
+
+module "key" {
+  count                 = local.conditions.provision_key ? 1 : 0
+  source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-core-security-kms.git"
+
+  key_config            = {
+      alias             = "${local.prefix}-ec2-key"
+  }
+}

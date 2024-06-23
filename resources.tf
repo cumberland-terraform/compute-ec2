@@ -1,5 +1,5 @@
 resource "aws_key_pair" "ssh_key" {
-    count                        = var.instance_config.key_name == null ? 1 : 0
+    count                        = local.conditions.provision_key ? 1 : 0
 
     key_name                     = "${local.prefix}_key"
     public_key                   = tls_private_key.rsa[0].public_key_openssh
@@ -7,7 +7,7 @@ resource "aws_key_pair" "ssh_key" {
 
 
 resource "tls_private_key" "rsa" {
-    count                        = var.instance_config.key_name == null ? 1 : 0
+    count                        = local.conditions.provision_key ? 1 : 0
 
     algorithm                    = local.ssh_key_algorithm
     rsa_bits                     = local.ssh_key_bits
@@ -15,7 +15,7 @@ resource "tls_private_key" "rsa" {
 
 
 resource "local_file" "tf-key" {
-    count                       = var.instance_config.key_name == null ? 1 : 0
+    count                       = local.conditions.provision_key ? 1 : 0
 
     content                     = tls_private_key.rsa[0].private_key_pem
     filename                    = "${path.root}/keys/${local.prefix}_key"
@@ -75,7 +75,7 @@ resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.instance_config.public
     ebs_optimized               = true
-    key_name                    = var.instance_config.key_name == null ? (
+    key_name                    = local.conditions.provision_key ? (
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
                                     var.instance_config.key_name
