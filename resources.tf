@@ -75,7 +75,7 @@ resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.ec2_config.public
     ebs_optimized               = true
-    key_name                    = local.conditions.provision_key ? (
+    key_name                    = local.conditions.provision_ssh_key ? (
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
                                     var.ec2_config.ssh_key_name
