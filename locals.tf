@@ -21,12 +21,14 @@ locals {
       PrimaryContact    = var.ec2_config.contact
       NewBuild          = var.ec2_config.new_build
     }
-    prefix              = "${join("-", [
-                            module.lookup_data.service_abbr,
-                            module.lookup_data.agency_oneletterkey,
-                            module.lookup_data.account_threeletterkey,
-                            module.lookup_data.program_abbr]
-                        )}"
+    prefix              = lower(
+                            "${join("-", [
+                                module.lookup_data.service_abbr,
+                                module.lookup_data.agency_oneletterkey,
+                                module.lookup_data.account_threeletterkey,
+                                module.lookup_data.program_abbr]
+                            )}"
+                        )
 
     ssh_key_algorithm   = "RSA"
     ssh_key_bits        = 4096
