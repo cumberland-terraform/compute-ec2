@@ -32,7 +32,7 @@ locals {
     ssh_key_bits        = 4096
 
     conditions                      = {
-        provision_key               = var.rds_config.key_name == null
+        provision_key               = var.ec2_config.key_name == null
     }
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
