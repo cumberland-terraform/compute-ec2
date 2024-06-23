@@ -7,7 +7,7 @@ locals {
                             module.lookup_data.program_abbr,
                             module.lookup_data.region_twoletterkey,
                             module.lookup_data.account_env_threeletterkey,
-                            var.instance_config.suffix]
+                            var.ec2_config.suffix]
                         )}",
       CreationDate      = formatdate("YYYY-MM-DD", timestamp())
       Account           = module.lookup_data.account_threeletterkey
@@ -16,10 +16,10 @@ locals {
       Program           = module.lookup_data.program_key
       Region            = module.lookup_data.region_twoletterkey
       "PCA Code"        = var.platform.pca
-      AutoBackup        = var.instance_config.auto_backup
-      Schedule          = var.instance_config.schedule
-      PrimaryContact    = var.instance_config.contact
-      NewBuild          = var.instance_config.new_build
+      AutoBackup        = var.ec2_config.auto_backup
+      Schedule          = var.ec2_config.schedule
+      PrimaryContact    = var.ec2_config.contact
+      NewBuild          = var.ec2_config.new_build
     }
     prefix              = "${join("-", [
                             module.lookup_data.service_abbr,
@@ -36,10 +36,10 @@ locals {
     }
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
-    ami_filters                 = strcontains(var.instance_config.operating_system, "RHEL") ? [
+    ami_filters                 = strcontains(var.ec2_config.operating_system, "RHEL") ? [
         {
             "key"               = "tag:OS",
-            "value"             = [ var.instance_config.operating_system ]
+            "value"             = [ var.ec2_config.operating_system ]
         },
         {
             "key"               = "tag:Application"
@@ -48,7 +48,7 @@ locals {
     ] : [
         {
             "key"               = "tag:OS",
-            "value"             = [ var.instance_config.operating_system ]
+            "value"             = [ var.ec2_config.operating_system ]
         },
         {
             "key"               = "tag:Purpose"
@@ -56,14 +56,14 @@ locals {
         }
     ]
 
-    userdata_path       = strcontains(var.instance_config.operating_system, "RHEL") ? (
+    userdata_path       = strcontains(var.ec2_config.operating_system, "RHEL") ? (
         # RHEL user-data EXTENSION
         "${path.module}/user-data/rhel/user-data.sh" 
     ) : (
         # WINDOWS user-data EXTENSION
         "${path.module}/user-data/windows/user-data.ps1" 
     )
-    userdata_config     = strcontains(var.instance_config.operating_system, "RHEL") ? {
+    userdata_config     = strcontains(var.ec2_config.operating_system, "RHEL") ? {
         # RHEL USERDATA CONFIGURATION
         AWS_DEFAULT_REGION  = "${data.aws_region.current.name}"
         AWS_ACCOUNT_ID      = "${data.aws_caller_identity.current.account_id}"

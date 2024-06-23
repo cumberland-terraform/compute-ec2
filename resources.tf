@@ -23,7 +23,7 @@ resource "local_file" "tf-key" {
 
 
 resource "aws_security_group" "remote_access_sg" {
-    count                       = var.instance_config.provision_sg ? 1 : 0
+    count                       = var.ec2_config.provision_sg ? 1 : 0
 
     name                        = "${local.prefix}-remote-access"
     description                 = "${local.prefix} security group"
@@ -33,7 +33,7 @@ resource "aws_security_group" "remote_access_sg" {
 
 
 resource "aws_security_group_rule" "remote_access_ingress" {
-    count                       = var.instance_config.provision_sg ? 1 : 0
+    count                       = var.ec2_config.provision_sg ? 1 : 0
 
     description                 = "Restrict access to VPC CIDR block"
     type                        = "ingress"
@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "remote_access_ingress" {
 
 
 resource "aws_security_group_rule" "remote_access_egress" {
-    count                       = var.instance_config.provision_sg ? 1 : 0
+    count                       = var.ec2_config.provision_sg ? 1 : 0
 
     description                 = "Allow all outgoing traffic"
     type                        = "egress"
@@ -59,13 +59,13 @@ resource "aws_security_group_rule" "remote_access_egress" {
 
 
 resource "aws_eip" "bastion_ip" {
-    count                       = var.instance_config.public ? 1 : 0
+    count                       = var.ec2_config.public ? 1 : 0
     tags                        = local.tags
 }
 
 
 resource "aws_eip_association" "eip_assoc" {
-    count                       = var.instance_config.public ? 1 : 0
+    count                       = var.ec2_config.public ? 1 : 0
 
     instance_id                 = aws_instance.instance.id
     allocation_id               = aws_eip.bastion_ip[0].id
@@ -73,15 +73,15 @@ resource "aws_eip_association" "eip_assoc" {
 
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
-    associate_public_ip_address = var.instance_config.public
+    associate_public_ip_address = var.ec2_config.public
     ebs_optimized               = true
     key_name                    = local.conditions.provision_key ? (
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
-                                    var.instance_config.key_name
+                                    var.ec2_config.key_name
                                 )
-    iam_instance_profile        = var.instance_config.instance_profile
-    instance_type               = var.instance_config.type
+    iam_instance_profile        = var.ec2_config.instance_profile
+    instance_type               = var.ec2_config.type
     monitoring                  = true 
     subnet_id                   = var.vpc_config.subnet_id
     tags                        = local.tags
@@ -89,7 +89,7 @@ resource "aws_instance" "instance" {
                                     local.userdata_path,
                                     local.userdata_config
                                 )
-    vpc_security_group_ids      = var.instance_config.provision_sg ? concat(
+    vpc_security_group_ids      = var.ec2_config.provision_sg ? concat(
                                     [ aws_security_group.remote_access_sg[0].id ],
                                     var.vpc_config.security_group_ids
                                 ) : (

@@ -23,7 +23,7 @@ variable "vpc_config" {
 }
 
 
-variable "instance_config" {
+variable "ec2_config" {
   description                           = "Configuration for the host environment."
   type = object({
     instance_profile                    = string
@@ -53,7 +53,7 @@ variable "instance_config" {
         "Windows2016",
         "Windows2019",
         "Windows2022"
-      ], var.instance_config.operating_system)
+      ], var.ec2_config.operating_system)
     error_message                       = "Valid values: (RHEL7, RHEL8, Windows2012R2, Windows2016, Windows2019, Windows2022)."
   } 
 }
