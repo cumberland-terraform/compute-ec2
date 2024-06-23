@@ -1,5 +1,5 @@
 resource "aws_key_pair" "ssh_key" {
-    count                        = local.conditions.provision_key ? 1 : 0
+    count                        = local.conditions.provision_ssh_key ? 1 : 0
 
     key_name                     = "${local.prefix}_key"
     public_key                   = tls_private_key.rsa[0].public_key_openssh
@@ -7,7 +7,7 @@ resource "aws_key_pair" "ssh_key" {
 
 
 resource "tls_private_key" "rsa" {
-    count                        = local.conditions.provision_key ? 1 : 0
+    count                        = local.conditions.provision_ssh_key ? 1 : 0
 
     algorithm                    = local.ssh_key_algorithm
     rsa_bits                     = local.ssh_key_bits
@@ -15,7 +15,7 @@ resource "tls_private_key" "rsa" {
 
 
 resource "local_file" "tf-key" {
-    count                       = local.conditions.provision_key ? 1 : 0
+    count                       = local.conditions.provision_ssh_key ? 1 : 0
 
     content                     = tls_private_key.rsa[0].private_key_pem
     filename                    = "${path.root}/keys/${local.prefix}_key"
@@ -78,7 +78,7 @@ resource "aws_instance" "instance" {
     key_name                    = local.conditions.provision_key ? (
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
-                                    var.ec2_config.key_name
+                                    var.ec2_config.ssh_key_name
                                 )
     iam_instance_profile        = var.ec2_config.instance_profile
     instance_type               = var.ec2_config.type
@@ -103,5 +103,10 @@ resource "aws_instance" "instance" {
 
     root_block_device {
         encrypted               = true
+        kms_key_id              = local.conditions.provision_kms_key ? (
+                                    module.kms[0].key.id
+                                ) : (
+                                    var.ec2_config.kms_key_id
+                                )
     }
 }

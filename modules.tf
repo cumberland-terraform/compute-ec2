@@ -9,7 +9,7 @@ module "lookup_data" {
 }
 
 module "key" {
-  count                 = local.conditions.provision_key ? 1 : 0
+  count                 = local.conditions.provision_kms_key ? 1 : 0
   source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-core-security-kms.git"
 
   key_config            = {

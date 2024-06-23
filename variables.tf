@@ -39,7 +39,8 @@ variable "ec2_config" {
     # TODO: discover purpose of this tag
     auto_backup                         = bool
     type                                = optional(string, "t3.xlarge")
-    key_name                            = optional(string, null)
+    ssh_key_name                        = optional(string, null)
+    kms_key_id                          = optional(string, null)
     public                              = optional(bool, false)
     provision_sg                        = optional(bool, true)
   })
