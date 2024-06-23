@@ -8,7 +8,7 @@ module "lookup_data" {
   lookupaccount         = var.platform.account
 }
 
-module "key" {
+module "kms" {
   count                 = local.conditions.provision_kms_key ? 1 : 0
   source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-core-security-kms.git"
 
