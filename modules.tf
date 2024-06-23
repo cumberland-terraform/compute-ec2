@@ -15,4 +15,5 @@ module "key" {
   key_config            = {
       alias             = "${local.prefix}-ec2-key"
   }
+  platform              = var.platform
 }
