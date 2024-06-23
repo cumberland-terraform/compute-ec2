@@ -23,7 +23,7 @@ pipeline {
 		*/
 		stage ('Dependencies') {
 			steps {
-				echo '----- Confirming Dependencies'
+				echo '----- Confirming Terraform is Preasent'
 				sh '''
 				    if ! command -V terraform &> /dev/null
 					then
@@ -34,12 +34,25 @@ pipeline {
 					else
 					    terraform --version
 					fi
-					if ! command -V tflint &> /dev/null
+				'''
+				echo '----- Confirming TFLint is Preasent'
+				sh '''
+				    if ! command -V tflint &> /dev/null
 					then
 					    curl -s https://raw.githubusercontent.com/terraform-linters/tflint/master/install_linux.sh | bash
 						tflint --version
 					else
 					    tflint --version
+					fi
+				'''
+				echo '----- Confirming TFSec is Preasent'
+				sh '''
+				    if ! command -V tfsec &> /dev/null
+					then
+					    curl -s https://raw.githubusercontent.com/aquasecurity/tfsec/master/scripts/install_linux.sh | bash
+						tfsec --version
+					else
+					    tfsec --version
 					fi
 				'''
 			}
@@ -48,6 +61,15 @@ pipeline {
 		stage ('Lint') {
 			steps {
 				echo '----- Linting'
+			}
+		}
+
+		stage ('Sec Scanning') {
+		    steps {
+				echo '----- Security and Misconfiguration scanning'
+				sh '''
+				    tfsec
+				'''
 			}
 		}
 
