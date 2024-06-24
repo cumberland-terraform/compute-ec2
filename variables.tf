@@ -7,6 +7,7 @@ variable "platform" {
     account                             = string
     agency                              = string
     program                             = string
+    app                                 = string
     env                                 = string
     pca                                 = string
   })
