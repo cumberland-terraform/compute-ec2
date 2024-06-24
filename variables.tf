@@ -38,6 +38,27 @@ variable "ec2_config" {
     new_build                           = bool
     # TODO: discover purpose of this tag
     auto_backup                         = bool
+    # `root_block_device`: configuration for root volume
+    root_block_device                   = optional(
+                                            object({
+                                              volume_type   = string
+                                              volume_size   = number
+                                            }),
+                                            {
+                                              volume_type   = "gp3"
+                                              volume_size   = 10
+                                            }
+                                        )
+    # `ebs_block_devices`: list of volumes to attach
+    ebs_block_devices                   = optional(
+                                            list(
+                                              object({
+                                                device_name   = string
+                                                volume_type   = string
+                                                volume_size   = number
+                                              })
+                                            ), 
+                                          [])
     type                                = optional(string, "t3.xlarge")
     ssh_key_name                        = optional(string, null)
     kms_key_id                          = optional(string, null)

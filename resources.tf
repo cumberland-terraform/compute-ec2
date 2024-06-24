@@ -74,15 +74,11 @@ resource "aws_eip_association" "eip_assoc" {
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.ec2_config.public
-    ebs_optimized               = true
-    key_name                    = local.conditions.provision_ssh_key ? (
-                                    aws_key_pair.ssh_key[0].key_name 
-                                ) : ( 
-                                    var.ec2_config.ssh_key_name
-                                )
+    ebs_optimized               = local.ec2_defaults.ebs_optimized
+    key_name                    = local.ssh_key_name
     iam_instance_profile        = var.ec2_config.instance_profile
     instance_type               = var.ec2_config.type
-    monitoring                  = true 
+    monitoring                  = local.ec2_defaults.monitoring
     subnet_id                   = var.vpc_config.subnet_id
     tags                        = local.tags
     user_data                   = templatefile(
@@ -102,11 +98,24 @@ resource "aws_instance" "instance" {
     }
 
     root_block_device {
-        encrypted               = true
-        kms_key_id              = local.conditions.provision_kms_key ? (
-                                    module.kms[0].key.id
-                                ) : (
-                                    var.ec2_config.kms_key_id
-                                )
+        encrypted               = local.ec2_defaults.encrypted
+        kms_key_id              = local.kms_key_id
+        volume_size             = var.ec2_config.root_block_device.volume_size
+        volume_type             = var.ec2_config.root_block_device.volume_type
+    }
+
+    dynamic "ebs_block_device" {
+        for_each                = { 
+                                    for index, device in var.ec2_config.ebs_block_devices:
+                                    index => device
+                                }
+        content {
+            encrypted           = local.ec2_defaults.encrypted
+            kms_key_id          = local.kms_key_id
+            tags                = local.tags
+            device_name         = each.value.device_name
+            volume_size         = each.value.volume_size
+            volume_type         = each.value.volume_type
+        }
     }
 }
