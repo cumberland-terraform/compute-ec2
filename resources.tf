@@ -113,9 +113,9 @@ resource "aws_instance" "instance" {
             encrypted           = local.ec2_defaults.encrypted
             kms_key_id          = local.kms_key_id
             tags                = local.tags
-            device_name         = each.value.device_name
-            volume_size         = each.value.volume_size
-            volume_type         = each.value.volume_type
+            device_name         = ebs_block_device.value.device_name
+            volume_size         = ebs_block_device.value.volume_size
+            volume_type         = ebs_block_device.value.volume_type
         }
     }
 }
