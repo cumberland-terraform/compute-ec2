@@ -4,7 +4,6 @@ locals {
         Name                    = join(
                                     "", 
                                     [
-                                        module.lookup_data.service_abbr,
                                         module.lookup_data.agency_oneletterkey,
                                         module.lookup_data.account_threeletterkey,
                                         module.lookup_data.program_key,
