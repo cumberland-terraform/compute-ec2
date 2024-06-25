@@ -83,7 +83,7 @@ locals {
         AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
         AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
     }
-    
+
     ## EC2 PLATFORM DEFAULTS
     #   These are platform specific configuration options. They should only need
     #       updated if the platform itself changes.
@@ -94,7 +94,7 @@ locals {
     }
     ssh_key_defaults            = {
         algorithm               = "RSA"
-        key_bits                = 4096
+        bits                    = 4096
     }
 
     # These are extra filters that have to be added to the AMI data query to ensure the results
