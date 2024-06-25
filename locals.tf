@@ -23,6 +23,7 @@ locals {
       Application               = var.ec2_config.tags.application
       AutoBackup                = var.ec2_config.tags.auto_backup
       Builder                   = var.ec2_config.tags.builder
+      Owner                     = var.ec2_config.tags.owner
       Schedule                  = var.ec2_config.tags.schedule
       PrimaryContact            = var.ec2_config.tags.contact
       NewBuild                  = var.ec2_config.tags.new_build

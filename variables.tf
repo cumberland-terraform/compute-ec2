@@ -39,6 +39,7 @@ variable "ec2_config" {
       schedule                          = string
       rhel_repo                         = string
       domain                            = string
+      owner                             = string
       new_build                         = bool
       auto_backup                       = bool 
     })
