@@ -2,7 +2,7 @@ locals {
     # resource tags
     tags                        = {
         Name                    = join(
-                                    "-", 
+                                    "", 
                                     [
                                         module.lookup_data.service_abbr,
                                         module.lookup_data.agency_oneletterkey,
