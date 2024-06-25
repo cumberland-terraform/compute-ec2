@@ -21,7 +21,7 @@ locals {
                                         [
                                             module.platform.agency.oneletterkey,
                                             module.platform.account.threeletterkey,
-                                            module.platform.program.abbr
+                                            module.platform.program.key
                                         ]
                                     )
                                 )
