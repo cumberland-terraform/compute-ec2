@@ -18,6 +18,7 @@ variable "vpc_config" {
   type = object({
       id                                = string
       subnet_id                         = string
+      availability_zone                 = string
       security_group_ids                = list(string)
   })
   sensitive                             = true
