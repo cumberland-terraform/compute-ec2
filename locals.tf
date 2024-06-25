@@ -19,10 +19,10 @@ locals {
                                     join(
                                         "-", 
                                         [
-                                            module.lookup_data.service_abbr,
-                                            module.lookup_data.agency_oneletterkey,
-                                            module.lookup_data.account_threeletterkey,
-                                            module.lookup_data.program_abbr
+                                            module.platform.service.abbr,
+                                            module.platform.agency.oneletterkey,
+                                            module.platform.account.threeletterkey,
+                                            module.platform.program.abbr
                                         ]
                                     )
                                 )
@@ -30,20 +30,20 @@ locals {
         Name                    = join(
                                     "", 
                                     [
-                                        module.lookup_data.agency_oneletterkey,
-                                        module.lookup_data.account_threeletterkey,
-                                        module.lookup_data.program_key,
-                                        module.lookup_data.region_twoletterkey,
-                                        module.lookup_data.account_env_threeletterkey,
+                                        module.platform.agency.oneletterkey,
+                                        module.platform.account.threeletterkey,
+                                        module.platform.program.key,
+                                        module.platform.region.twoletterkey,
+                                        module.platform.account_env.threeletterkey,
                                         var.ec2_config.suffix
                                     ]
                                 )
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
-        Account                 = module.lookup_data.account_threeletterkey
-        Environment             = module.lookup_data.account_env_fourletterkey
-        Agency                  = module.lookup_data.agency_oneletterkey
-        Program                 = module.lookup_data.program_key
-        Region                  = module.lookup_data.region_twoletterkey
+        Account                 = module.platform.account.threeletterkey
+        Environment             = module.platform.account_env.fourletterkey
+        Agency                  = module.platform.agency.oneletterkey
+        Program                 = module.platform.program.key
+        Region                  = module.platform.region.twoletterkey
         "PCA Code"              = var.platform.pca
         Application             = var.ec2_config.tags.application
         AutoBackup              = var.ec2_config.tags.auto_backup
