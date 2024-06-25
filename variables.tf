@@ -30,15 +30,18 @@ variable "ec2_config" {
     instance_profile                    = string
     suffix                              = string
     operating_system                    = string
-    ## The next four arguments are used to template EC2 tags
-    # PRIMARY CONTACT: name of team member who is responsible for instance!
-    contact                             = string
-    # TODO: discover purpose of this tag
-    schedule                            = string
-    # TODO: discover purpose of this tag
-    new_build                           = bool
-    # TODO: discover purpose of this tag
-    auto_backup                         = bool
+    # `tags`: Tags required by MDTHINK Platform
+    # More Info: https://wiki.mdthink.maryland.gov/pages/viewpage.action?pageId=45318318
+    tags                                = object({
+      application                       = string
+      builder                           = string
+      contact                           = string
+      schedule                          = string
+      rhel_repo                         = string
+      domain                            = string
+      new_build                         = bool
+      auto_backup                       = bool 
+    })
     # `root_block_device`: configuration for root volume
     root_block_device                   = optional(
                                             object({
@@ -78,5 +81,14 @@ variable "ec2_config" {
         "Windows2022"
       ], var.ec2_config.operating_system)
     error_message                       = "Valid values: (RHEL7, RHEL8, Windows2012R2, Windows2016, Windows2019, Windows2022)."
+  } 
+
+  validation {
+    condition                           = contains(
+      [
+        "Monthly",
+        "NA"
+      ], var.ec2_config.tags.rhel_repo)
+    error_message                       = "Valid values: (Monthly, NA)."
   } 
 }

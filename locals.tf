@@ -20,10 +20,13 @@ locals {
       Program                   = module.lookup_data.program_key
       Region                    = module.lookup_data.region_twoletterkey
       "PCA Code"                = var.platform.pca
-      AutoBackup                = var.ec2_config.auto_backup
-      Schedule                  = var.ec2_config.schedule
-      PrimaryContact            = var.ec2_config.contact
-      NewBuild                  = var.ec2_config.new_build
+      Application               = var.ec2_config.tags.application
+      AutoBackup                = var.ec2_config.tags.auto_backup
+      Builder                   = var.ec2_config.tags.builder
+      Schedule                  = var.ec2_config.tags.schedule
+      PrimaryContact            = var.ec2_config.tags.contact
+      NewBuild                  = var.ec2_config.tags.new_build
+      RhelRepo                  = var.ec2_config.tags.rhel_repo
     }
     # resource prefix
     prefix                      = lower(
