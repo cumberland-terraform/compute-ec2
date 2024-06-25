@@ -33,9 +33,9 @@ locals {
                                         module.platform.agency.oneletterkey,
                                         module.platform.account.threeletterkey,
                                         var.ec2_config.suffix,
-                                        module.platform.program.key,
                                         module.platform.region.twoletterkey,
                                         module.platform.account_env.threeletterkey,
+                                        "01" # TODO: this needs to change if more than one server!
                                     ]
                                 )
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
