@@ -1,5 +1,31 @@
 locals {
-    # resource tags
+    ## CONDITIONS
+    # This is a map containing booleans that correspond to different 
+    #       deployment configurations.
+    conditions                  = {
+        provision_ssh_key       = var.ec2_config.ssh_key_name == null
+        provision_kms_key       = var.ec2_config.kms_key_id == null
+    }
+
+    ## CALCULATED PROPERTIES
+    # Variables that store local calculations.
+    os                          = strcontains(var.ec2_config.operating_system, "Windows") ? (
+                                    "Windows"
+                                ) : (
+                                    var.ec2_config.operating_system
+                                )
+
+    prefix                      = lower(
+                                    join(
+                                        "-", 
+                                        [
+                                            module.lookup_data.service_abbr,
+                                            module.lookup_data.agency_oneletterkey,
+                                            module.lookup_data.account_threeletterkey,
+                                            module.lookup_data.program_abbr
+                                        ]
+                                    )
+                                )
     tags                        = {
         Name                    = join(
                                     "", 
@@ -23,43 +49,12 @@ locals {
         AutoBackup              = var.ec2_config.tags.auto_backup
         Builder                 = var.ec2_config.tags.builder
         Owner                   = var.ec2_config.tags.owner
-        OS                      = strcontains(var.ec2_config.operating_system, "Windows") ? (
-                                    "Windows"
-                                ) : (
-                                    var.ec2_config.operating_system
-                                )
+        OS                      = local.os
         Schedule                = var.ec2_config.tags.schedule
         PrimaryContact          = var.ec2_config.tags.contact
         NewBuild                = var.ec2_config.tags.new_build
         RhelRepo                = var.ec2_config.tags.rhel_repo
     }
-    # resource prefix
-    prefix                      = lower(
-                                    join(
-                                        "-", 
-                                        [
-                                            module.lookup_data.service_abbr,
-                                            module.lookup_data.agency_oneletterkey,
-                                            module.lookup_data.account_threeletterkey,
-                                            module.lookup_data.program_abbr
-                                        ]
-                                    )
-                                )
-    # Platform Defaults
-    ec2_defaults                = {
-        ebs_optimized           = true
-        encrypted               = true
-        monitoring              = true
-    }
-    # ssh key configuration
-    ssh_key_algorithm           = "RSA"
-    ssh_key_bits                = 4096
-
-    conditions                  = {
-        provision_ssh_key       = var.ec2_config.ssh_key_name == null
-        provision_kms_key       = var.ec2_config.kms_key_id == null
-    }
-    
     kms_key_id                  = local.conditions.provision_kms_key ? (
                                     module.kms[0].key.id
                                 ) : (
@@ -69,7 +64,39 @@ locals {
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
                                     var.ec2_config.ssh_key_name
-                                )         
+                                ) 
+    userdata_path               = strcontains(var.ec2_config.operating_system, "RHEL") ? (
+        # RHEL ```user-data``` EXTENSION
+        "${path.module}/user-data/rhel/user-data.sh" 
+    ) : (
+        # WINDOWS ```user-data``` EXTENSION
+        "${path.module}/user-data/windows/user-data.ps1" 
+    )
+    userdata_config             = strcontains(var.ec2_config.operating_system, "RHEL") ? {
+        # RHEL ```user-data``` CONFIGURATION
+        AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
+        AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
+        SYS_ARCH                = "amd64"
+        OS                      = "linux"
+    } : {
+        # WINDOWS ```user-data``` CONFIGURATION
+        AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
+        AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
+    }
+    
+    ## EC2 PLATFORM DEFAULTS
+    #   These are platform specific configuration options. They should only need
+    #       updated if the platform itself changes.
+    ec2_defaults                = {
+        ebs_optimized           = true
+        encrypted               = true
+        monitoring              = true
+    }
+    ssh_key_defaults            = {
+        algorithm               = "RSA"
+        key_bits                = 4096
+    }
+
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                 = strcontains(var.ec2_config.operating_system, "RHEL") ? [
@@ -91,23 +118,4 @@ locals {
             "value"             = [ "*Baseline*" ]
         }
     ]
-
-    userdata_path               = strcontains(var.ec2_config.operating_system, "RHEL") ? (
-        # RHEL ```user-data``` EXTENSION
-        "${path.module}/user-data/rhel/user-data.sh" 
-    ) : (
-        # WINDOWS ```user-data``` EXTENSION
-        "${path.module}/user-data/windows/user-data.ps1" 
-    )
-    userdata_config             = strcontains(var.ec2_config.operating_system, "RHEL") ? {
-        # RHEL ```user-data``` CONFIGURATION
-        AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
-        AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
-        SYS_ARCH                = "amd64"
-        OS                      = "linux"
-    } : {
-        # WINDOWS ```user-data``` CONFIGURATION
-        AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
-        AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
-    }
 }

@@ -9,8 +9,8 @@ resource "aws_key_pair" "ssh_key" {
 resource "tls_private_key" "rsa" {
     count                        = local.conditions.provision_ssh_key ? 1 : 0
 
-    algorithm                    = local.ssh_key_algorithm
-    rsa_bits                     = local.ssh_key_bits
+    algorithm                    = local.ssh_key_defaults.key_algorithm
+    rsa_bits                     = local.ssh_key_defaults.bits
 }
 
 
