@@ -7,7 +7,7 @@ locals {
                                         module.lookup_data.service_abbr,
                                         module.lookup_data.agency_oneletterkey,
                                         module.lookup_data.account_threeletterkey,
-                                        module.lookup_data.program_abbr,
+                                        module.lookup_data.program_key,
                                         module.lookup_data.region_twoletterkey,
                                         module.lookup_data.account_env_threeletterkey,
                                         var.ec2_config.suffix
