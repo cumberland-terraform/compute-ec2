@@ -1,5 +1,6 @@
-module "lookup_data" {
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-lookups.git"
+module "platform" {
+  source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-platform.git"
+  
   lookupawsservice      = "Elastic Compute Cloud"
   lookupagency          = var.platform.agency
   lookupawsregion       = var.platform.aws_region
