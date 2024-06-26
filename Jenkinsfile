@@ -72,8 +72,7 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
-					ls -al
-					terraform test --test-directory=$(pwd)/tests
+					terraform test 
 				'''
 			}
 		}
