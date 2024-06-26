@@ -44,22 +44,22 @@ locals {
                                 )
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
         Account                 = module.platform.account.threeletterkey
-        Environment             = module.platform.account_env.twoletterkey
-        Agency                  = module.platform.agency.abbr
+        Environment             = module.platform.account_env.fourletterkey
+        Agency                  = module.platform.agency.key
         Program                 = module.platform.program.key
         Region                  = module.platform.region.twoletterkey
         "PCA Code"              = var.platform.pca
         Application             = var.ec2_config.tags.application
         AutoBackup              = var.ec2_config.tags.auto_backup
         Builder                 = var.ec2_config.tags.builder
+        Domain                  = var.ec2_config.tags.domain
         Owner                   = var.ec2_config.tags.owner
         Schedule                = var.ec2_config.tags.schedule
         PrimaryContact          = var.ec2_config.tags.contact
         NewBuild                = var.ec2_config.tags.new_build
         RhelRepo                = var.ec2_config.tags.rhel_repo
-        AZ                      = var.vpc_config.availability_zone
+        Purpose                 = var.ec2_config.tags.purpose
         OS                      = local.os
-        Node                    = local.node
     }
     kms_key_id                  = local.conditions.provision_kms_key ? (
                                     module.kms[0].key.id

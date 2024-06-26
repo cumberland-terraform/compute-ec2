@@ -41,6 +41,7 @@ variable "ec2_config" {
       rhel_repo                         = string
       domain                            = string
       owner                             = string
+      purpose                           = string
       new_build                         = bool
       auto_backup                       = bool 
     })
