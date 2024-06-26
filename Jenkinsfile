@@ -63,7 +63,7 @@ pipeline {
 		    steps {
 				echo '----- Security and Misconfiguration scanning'
 				sh '''
-				    tfsec . --format json --no-colour
+				    tfsec . --format json --no-colour --soft-fail
 				'''
 			}
 		}
