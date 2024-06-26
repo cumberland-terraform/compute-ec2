@@ -1,4 +1,6 @@
 # valid_string_concat.tftest.hcl
+mock_provider "aws" {}
+
 variables {
     ec2_config                              = {
         instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
