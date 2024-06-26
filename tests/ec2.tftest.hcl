@@ -1,5 +1,5 @@
 # valid_string_concat.tftest.hcl
-mock_provider "aws" {}
+provider "aws" {}
 
 variables {
     ec2_config                              = {
