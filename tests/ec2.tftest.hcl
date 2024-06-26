@@ -1,5 +1,8 @@
 # valid_string_concat.tftest.hcl
-provider "aws" {}
+provider "aws" {
+    alias                   = "core"
+    region                  = "us-east-1"
+}
 
 variables {
     ec2_config                              = {
