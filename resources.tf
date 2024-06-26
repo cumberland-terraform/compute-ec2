@@ -92,6 +92,14 @@ resource "aws_instance" "instance" {
                                     var.vpc_config.security_group_ids
                                 )                                 
 
+    lifecycle {
+        # TF is interpretting the tag calculations as a modification everytime 
+        #   a plan is run, so ignore until issue is resuled.
+        ignore_changes          = [
+                                    tags,
+                                ]
+    }
+    
     metadata_options {
         http_endpoint           = "enabled"
         http_tokens             = "required"
@@ -99,8 +107,8 @@ resource "aws_instance" "instance" {
 
     # CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
     #   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
-    #   AMI MAPPINGS, FORCING REDEPLOYMENT!
-    
+    #   AMI MAPPINGS, FORCING REDEPLOYMENT! 
+
     # root_block_device {
     #     encrypted               = local.ec2_defaults.encrypted
     #     kms_key_id              = local.kms_key_id
