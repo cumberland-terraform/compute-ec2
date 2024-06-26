@@ -97,25 +97,29 @@ resource "aws_instance" "instance" {
         http_tokens             = "required"
     }
 
-    root_block_device {
-        encrypted               = local.ec2_defaults.encrypted
-        kms_key_id              = local.kms_key_id
-        volume_size             = var.ec2_config.root_block_device.volume_size
-        volume_type             = var.ec2_config.root_block_device.volume_type
-    }
+    # CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
+    #   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
+    #   AMI MAPPINGS, FORCING REDEPLOYMENT!
+    
+    # root_block_device {
+    #     encrypted               = local.ec2_defaults.encrypted
+    #     kms_key_id              = local.kms_key_id
+    #     volume_size             = var.ec2_config.root_block_device.volume_size
+    #     volume_type             = var.ec2_config.root_block_device.volume_type
+    # }
 
-    dynamic "ebs_block_device" {
-        for_each                = { 
-                                    for index, device in var.ec2_config.ebs_block_devices:
-                                    index => device
-                                }
-        content {
-            encrypted           = local.ec2_defaults.encrypted
-            kms_key_id          = local.kms_key_id
-            tags                = local.tags
-            device_name         = ebs_block_device.value.device_name
-            volume_size         = ebs_block_device.value.volume_size
-            volume_type         = ebs_block_device.value.volume_type
-        }
-    }
+    # dynamic "ebs_block_device" {
+    #     for_each                = { 
+    #                                 for index, device in var.ec2_config.ebs_block_devices:
+    #                                 index => device
+    #                             }
+    #     content {
+    #         encrypted           = local.ec2_defaults.encrypted
+    #         kms_key_id          = local.kms_key_id
+    #         tags                = local.tags
+    #         device_name         = ebs_block_device.value.device_name
+    #         volume_size         = ebs_block_device.value.volume_size
+    #         volume_type         = ebs_block_device.value.volume_type
+    #     }
+    # }
 }
