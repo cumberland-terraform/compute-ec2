@@ -56,6 +56,9 @@ pipeline {
 		stage ('Lint') {
 			steps {
 				echo '----- Linting'
+				sh '''
+					tflint --recursive 
+				'''
 			}
 		}
 
