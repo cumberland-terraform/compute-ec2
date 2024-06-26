@@ -10,6 +10,21 @@ pipeline {
 	}
 
 	stages {
+			stage('Credentials') {
+				steps {
+					withCredentials([
+						file(credentialsId: 'mdtjenkinsbgit', variable: 'bitbucketsshkey')
+					]) {
+						sh '''
+							mkdir ~/.ssh
+							touch ~/.ssh/id_rsa
+							cat $(echo $bitbucketsshkey) > ~/.ssh/id_rsa
+							chmod 400 ~/.ssh/id_rsa
+							ssh-keyscan -t rsa source.mdthink.maryland.gov >> ~/.ssh/known_hosts
+						'''
+					}
+				}
+	   		}
 
 		/*
 		Check for Terraform and TFLint before install
@@ -79,7 +94,7 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
-					terraform init
+					terraform init -no-color
 					terraform test 
 				'''
 			}
