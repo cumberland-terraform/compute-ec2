@@ -9,6 +9,8 @@ locals {
 
     ## CALCULATED PROPERTIES
     # Variables that store local calculations.
+    # TODO: `node` should be calculated or parameterized
+    node                        = "01"
     os                          = strcontains(var.ec2_config.operating_system, "Windows") ? (
                                     "Windows"
                                 ) : (
@@ -36,13 +38,13 @@ locals {
                                             module.platform.region.twoletterkey,
                                             module.platform.account_env.twoletterkey,
                                             var.vpc_config.availability_zone,
-                                            "01" # TODO: this needs to change if more than one server!
+                                            local.node 
                                         ]
                                     )
                                 )
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
         Account                 = module.platform.account.threeletterkey
-        Environment             = module.platform.account_env.fourletterkey
+        Environment             = module.platform.account_env.twoletterkey
         Agency                  = module.platform.agency.abbr
         Program                 = module.platform.program.key
         Region                  = module.platform.region.twoletterkey
@@ -51,11 +53,13 @@ locals {
         AutoBackup              = var.ec2_config.tags.auto_backup
         Builder                 = var.ec2_config.tags.builder
         Owner                   = var.ec2_config.tags.owner
-        OS                      = local.os
         Schedule                = var.ec2_config.tags.schedule
         PrimaryContact          = var.ec2_config.tags.contact
         NewBuild                = var.ec2_config.tags.new_build
         RhelRepo                = var.ec2_config.tags.rhel_repo
+        AZ                      = var.vpc_config.availability_zone
+        OS                      = local.os
+        Node                    = local.node
     }
     kms_key_id                  = local.conditions.provision_kms_key ? (
                                     module.kms[0].key.id
