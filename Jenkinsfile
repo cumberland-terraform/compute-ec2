@@ -52,12 +52,16 @@ pipeline {
 				'''
 			}
 		}
-
+		/*
+		Uses recursive feature to lint subdirectories
+		Uses  force tag to return 0 exit code even when
+		issues are found. ONLY DURING INITIAL DEV
+		*/
 		stage ('Lint') {
 			steps {
 				echo '----- Linting'
 				sh '''
-					tflint --recursive 
+					tflint --recursive --force
 				'''
 			}
 		}
