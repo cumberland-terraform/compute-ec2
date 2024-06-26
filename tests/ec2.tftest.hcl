@@ -30,7 +30,7 @@ variables {
         id                                  = "123456"
         subnet_id                           = "abcde"
         security_group_ids                  = [
-            "hello_world
+            "hello_world"
         ]
     }
 }
