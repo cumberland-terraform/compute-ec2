@@ -79,6 +79,7 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
+					terraform init
 					terraform test 
 				'''
 			}
