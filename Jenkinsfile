@@ -76,6 +76,9 @@ pipeline {
 		stage ('Test') {
 			steps {
 				echo '---- Testing'
+				sh '''
+					terraform test
+				'''
 			}
 		}
 	}
