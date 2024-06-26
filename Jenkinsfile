@@ -77,7 +77,7 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
-					terraform test
+					terraform test --test-directory=./tests
 				'''
 			}
 		}
