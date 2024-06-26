@@ -45,7 +45,7 @@ locals {
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
         Account                 = module.platform.account.threeletterkey
         Environment             = module.platform.account_env.fourletterkey
-        Agency                  = module.platform.agency.key
+        Agency                  = module.platform.agency.abbr
         Program                 = module.platform.program.key
         Region                  = module.platform.region.twoletterkey
         "PCA Code"              = var.platform.pca
