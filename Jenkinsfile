@@ -11,11 +11,6 @@ pipeline {
 
 	stages {
 
-		stage ('cleanWorkSpace') {
-			steps { 
-				cleanWs() 
-			}
-		}
 		/*
 		Check for Terraform and TFLint before install
 		to reduce runtime. Print versions of each for
@@ -77,7 +72,8 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
-					terraform test
+					ls -al
+					terraform test --test-directory=$(pwd)/tests
 				'''
 			}
 		}
