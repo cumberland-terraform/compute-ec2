@@ -37,11 +37,11 @@ variables {
 
 run "validate_tag" {
 
-  command = plan
+  command                                   = plan
 
   assert {
-    condition     = aws_instance.instance.tags.Owner == "AWS DevOps Team"
-    error_message = "Owner Tag did not match input"
+    condition                               = aws_instance.instance.tags.Owner == "AWS DevOps Team"
+    error_message                           = "Owner Tag did not match input"
   }
 
 }
