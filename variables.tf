@@ -75,23 +75,28 @@ variable "ec2_config" {
 
   validation {
     condition                           = contains(
-      [
-        "RHEL7",
-        "RHEL8",
-        "Windows2012R2",
-        "Windows2016",
-        "Windows2019",
-        "Windows2022"
-      ], var.ec2_config.operating_system)
-    error_message                       = "Valid values: (RHEL7, RHEL8, Windows2012R2, Windows2016, Windows2019, Windows2022)."
+                                          [
+                                            "RHEL7",
+                                            "RHEL8",
+                                            "Windows2012R2",
+                                            "Windows2016",
+                                            "Windows2019",
+                                            "Windows2022"
+                                          ], var.ec2_config.operating_system)
+    error_message                       = "Valid values: (RHEL7, RHEL8, Windows2012R2, Windows2016, Windows2019, Windows2022)"
   } 
 
   validation {
     condition                           = contains(
-      [
-        "Monthly",
-        "NA"
-      ], var.ec2_config.tags.rhel_repo)
-    error_message                       = "Valid values: (Monthly, NA)."
+                                          [
+                                            "Monthly",
+                                            "NA"
+                                          ], var.ec2_config.tags.rhel_repo)
+    error_message                       = "Valid values: (Monthly, NA)"
   } 
+
+  validation {
+    condition                           = length(var.ec2_config.suffix) == 4
+    error_message                       = "Application suffix must be exactly four letters! See https://wiki.mdthink.maryland.gov/display/MDHR/Application+Inventory+and+Abbreviations"
+  }
 }
