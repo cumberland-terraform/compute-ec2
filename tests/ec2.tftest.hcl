@@ -1,4 +1,9 @@
 # valid_string_concat.tftest.hcl
+provider "aws" {
+    alias                   = "core"
+    region                  = "us-east-1"
+}
+
 variables {
     ec2_config                              = {
         instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
@@ -30,7 +35,7 @@ variables {
         id                                  = "123456"
         subnet_id                           = "abcde"
         security_group_ids                  = [
-            "hello_world
+            "hello_world"
         ]
     }
 }

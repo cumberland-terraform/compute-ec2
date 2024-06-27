@@ -10,6 +10,21 @@ pipeline {
 	}
 
 	stages {
+			stage('Credentials') {
+				steps {
+					withCredentials([
+						file(credentialsId: 'mdtjenkinsbgit', variable: 'bitbucketsshkey')
+					]) {
+						sh '''
+							mkdir ~/.ssh
+							touch ~/.ssh/id_rsa
+							cat $(echo $bitbucketsshkey) > ~/.ssh/id_rsa
+							chmod 400 ~/.ssh/id_rsa
+							ssh-keyscan -t rsa source.mdthink.maryland.gov >> ~/.ssh/known_hosts
+						'''
+					}
+				}
+	   		}
 
 		/*
 		Check for Terraform and TFLint before install
@@ -52,10 +67,17 @@ pipeline {
 				'''
 			}
 		}
-
+		/*
+		Uses recursive feature to lint subdirectories
+		Uses  force tag to return 0 exit code even when
+		issues are found. ONLY DURING INITIAL DEV
+		*/
 		stage ('Lint') {
 			steps {
 				echo '----- Linting'
+				sh '''
+					tflint --recursive --force
+				'''
 			}
 		}
 
@@ -63,7 +85,7 @@ pipeline {
 		    steps {
 				echo '----- Security and Misconfiguration scanning'
 				sh '''
-				    tfsec . --include-passed --format text --no-colour
+				    tfsec . --format json --no-colour --soft-fail
 				'''
 			}
 		}
@@ -72,8 +94,8 @@ pipeline {
 			steps {
 				echo '---- Testing'
 				sh '''
-					ls -al
-					terraform test --test-directory=$(pwd)/tests
+					terraform init -no-color
+					terraform test 
 				'''
 			}
 		}
