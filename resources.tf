@@ -72,8 +72,7 @@ resource "aws_eip_association" "eip_assoc" {
 }
 
 resource "aws_instance" "instance" {
-    ami                         = "ami-0527e82669750e41c"
-    # ami                         = data.aws_ami.latest.id
+    ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.ec2_config.public
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
