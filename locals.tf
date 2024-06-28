@@ -34,7 +34,7 @@ locals {
                                         [
                                             module.platform.agency.oneletterkey,
                                             module.platform.account.threeletterkey,
-                                            var.ec2_config.suffix,
+                                            module.platform.app.fourletterkey,
                                             module.platform.account_env.twoletterkey,
                                             module.platform.region.twoletterkey,
                                             var.vpc_config.availability_zone,
