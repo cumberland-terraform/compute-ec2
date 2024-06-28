@@ -55,7 +55,6 @@ locals {
         Schedule                = var.ec2_config.tags.schedule
         Domain                  = upper(var.ec2_config.tags.domain)
         "PCA Code"              = var.platform.pca
-
         CreationDate            = formatdate("YYYY-MM-DD", timestamp())
         AutoBackup              = var.ec2_config.tags.auto_backup
         PrimaryContact          = var.ec2_config.tags.contact
