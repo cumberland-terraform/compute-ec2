@@ -29,7 +29,6 @@ variable "ec2_config" {
   description                           = "Configuration for the host environment."
   type = object({
     instance_profile                    = string
-    suffix                              = string
     operating_system                    = string
     # `tags`: Tags required by MDTHINK Platform
     # More Info: https://wiki.mdthink.maryland.gov/pages/viewpage.action?pageId=45318318
