@@ -69,7 +69,7 @@ variable "ec2_config" {
     ssh_key_name                        = optional(string, null)
     kms_key_id                          = optional(string, null)
     public                              = optional(bool, false)
-    provision_sg                        = optional(bool, true)
+    provision_sg                        = optional(bool, false)
   })
 
   validation {
@@ -94,8 +94,4 @@ variable "ec2_config" {
     error_message                       = "Valid values: (Monthly, NA)"
   } 
 
-  validation {
-    condition                           = length(var.ec2_config.suffix) == 4
-    error_message                       = "Application suffix must be exactly four letters! See https://wiki.mdthink.maryland.gov/display/MDHR/Application+Inventory+and+Abbreviations"
-  }
 }
