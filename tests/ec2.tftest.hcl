@@ -12,25 +12,27 @@ variables {
     }
     platform = {
         type = {
-            core_aws_id     = "TEST_VALUE"
-            tenant_aws_id   = "TEST_VALUE"
-            aws_region      = "TEST_VALUE" 
-            account         = "TEST_VALUE"
-            acct_env        = "TEST_VALUE"
-            agency          = "TEST_VALUE"
-            program         = "TEST_VALUE"
-            app             = "TEST_VALUE"
-            app_env         = "TEST_VALUE"
-            pca             = "TEST_VALUE"
+        core_aws_id                         = "545019462778"
+        tenant_aws_id                       = "798223307841"
+        aws_region                          = "US EAST 1"
+        account                             = "ID ENGINEERING"
+        acct_env                            = "NOT SURE"
+        agency                              = "MARYLAND TOTAL HUMAN-SERVICES INTEGRATED NETWORK"
+        program                             = "MDTHINK SHARED PLATFORM"
+        app                                 = "PROOF OF CONCEPT"
+        app_env                             = "DEVELOPMENT 1"
+        pca                                 = "FE110"
         }
     }
     vpc_config = {
         type = {
-            id                                = "12341234"
-            subnet_id                         = "TEST_VALUEs"
-            availability_zone                 = "TEST_VALUE"
-            security_group_ids                = ["TEST1", "TEST2"]
-        }
+        availability_zone                   = "C"
+        id                                  = "MDT-IEG-E1-POC-APP"
+        subnet_id                           ="MDT-IEG-E1-C01-APP-PUB" 
+        security_group_ids                  = [
+            "SG-SIEGE1-MDTENG-DMEM-EC2"
+        ]
+    }
 
     }                    
         
