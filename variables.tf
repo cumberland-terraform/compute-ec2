@@ -69,7 +69,7 @@ variable "ec2_config" {
     ssh_key_name                        = optional(string, null)
     kms_key_id                          = optional(string, null)
     public                              = optional(bool, false)
-    provision_sg                        = optional(bool, true)
+    provision_sg                        = optional(bool, false)
   })
 
   validation {
