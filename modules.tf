@@ -9,7 +9,7 @@ module "platform" {
     account             = var.platform.account
     acct_env            = var.platform.acct_env
     app                 = var.platform.app
-    app_env             = var.platform.env
+    app_env             = var.platform.app_env
   }
 }
 
