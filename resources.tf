@@ -1,7 +1,7 @@
 resource "aws_key_pair" "ssh_key" {
     count                        = local.conditions.provision_ssh_key ? 1 : 0
 
-    key_name                     = "${local.prefix}_key"
+    key_name                     = module.platform.prefixes.security.pem_key
     public_key                   = tls_private_key.rsa[0].public_key_openssh
 }
 
@@ -18,15 +18,15 @@ resource "local_file" "tf-key" {
     count                       = local.conditions.provision_ssh_key ? 1 : 0
 
     content                     = tls_private_key.rsa[0].private_key_pem
-    filename                    = "${path.root}/keys/${local.prefix}_key"
+    filename                    = "${path.root}/keys/${module.platform.prefixes.security.pem_key}"
 }
 
 
 resource "aws_security_group" "remote_access_sg" {
     count                       = var.ec2_config.provision_sg ? 1 : 0
 
-    name                        = "${local.prefix}-remote-access"
-    description                 = "${local.prefix} security group"
+    name                        = module.platform.prefixes.security.group
+    description                 = "${module.platform.prefixes.compute.instance} security group"
     vpc_id                      = var.vpc_config.id
     tags                        = local.tags
 }
