@@ -45,26 +45,4 @@ locals {
         AWS_DEFAULT_REGION      = "${data.aws_region.current.name}"
         AWS_ACCOUNT_ID          = "${data.aws_caller_identity.current.account_id}"
     }
-
-    # These are extra filters that have to be added to the AMI data query to ensure the results
-    #   returned are unique
-    ami_filters                 = strcontains(var.ec2_config.operating_system, "RHEL") ? [
-        {
-            "key"               = "tag:OS",
-            "value"             = [ var.ec2_config.operating_system ]
-        },
-        {
-            "key"               = "tag:Application"
-            "value"             =  [ "Base AMI" ] # sure would be nice if windows and rhel had consistent tags!
-        }
-    ] : [
-        {
-            "key"               = "tag:OS",
-            "value"             = [ var.ec2_config.operating_system ]
-        },
-        {
-            "key"               = "tag:Purpose"
-            "value"             = [ "*Baseline*" ]
-        }
-    ]
 }
