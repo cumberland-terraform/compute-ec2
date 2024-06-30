@@ -95,7 +95,7 @@ resource "aws_instance" "instance" {
     lifecycle {
         # TF is interpretting the tag calculations as a modification everytime 
         #   a plan is run, so ignore until issue is resuled.
-        ignore_changes          = [ "tags" ]
+        ignore_changes          = [ tags ]
     }
     
     # ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/6/27
