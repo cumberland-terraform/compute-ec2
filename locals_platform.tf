@@ -1,5 +1,6 @@
 locals {
     tags                        = merge({
+        Name                    = module.platform.prefixes.compute.ec2.hostname
         Builder                 = var.ec2_config.tags.builder
         Owner                   = var.ec2_config.tags.owner
         Application             = var.ec2_config.tags.application
