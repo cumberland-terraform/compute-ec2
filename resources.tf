@@ -26,7 +26,7 @@ resource "aws_security_group" "remote_access_sg" {
     count                       = var.ec2_config.provision_sg ? 1 : 0
 
     name                        = module.platform.prefixes.security.group
-    description                 = "${module.platform.prefixes.compute.instance} security group"
+    description                 = "${module.platform.prefixes.compute.ec2.instance} security group"
     vpc_id                      = var.vpc_config.id
     tags                        = local.tags
 }
