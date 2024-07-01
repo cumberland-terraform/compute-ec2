@@ -95,7 +95,7 @@ pipeline {
 				echo '---- Testing'
 				sh '''
 					terraform init -no-color
-					terraform test 
+					terraform test -json
 				'''
 			}
 		}
