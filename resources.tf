@@ -1,5 +1,3 @@
-#tfsec:ignore:AVD-AWS-0131
-
 resource "aws_key_pair" "ssh_key" {
     count                        = local.conditions.provision_ssh_key ? 1 : 0
 
@@ -73,6 +71,7 @@ resource "aws_eip_association" "eip_assoc" {
     allocation_id               = aws_eip.bastion_ip[0].id
 }
 
+#tfsec:ignore:AVD-AWS-0131
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
     associate_public_ip_address = var.ec2_config.public
