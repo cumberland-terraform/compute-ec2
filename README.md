@@ -32,19 +32,22 @@ Append ``feature/`` to all new branches.
 git checkout -b feature/newthing
 ```
 
-(Future State) 
-Jenkins will run on PR requests from ``feature/*`` to ``master``. 
-NOTE: we could turn on SCM polling to accomplish this, but would be expensive.
-(Future State)
+After committing your changes, push them to your feature branch and then merge them into the `test` branch. 
+
+```bash
+git checkout test && git merge feature/newthing
+```
+
+Once the changes are in the `test` branch, the Jenkins job containing the unit tests, linting and security scans can be run. Once the tests are passing, a PR can be made from the `test` branch into the `master` branch.
 
 ### Pull Request Checklist
 
 - [] Update Changelog
 - [] Open PR into ``master`` branch
-- [] Ensure tests are passing in Jenkins
-- [] Get approval from lead
+- [] Ensure tests are passing in Jenkins on ``test`` branch.
+- [] Get approval from lead and one other team member
 - [] Tag latest commit with new version
-- [] Publish version to Confluence
+- [] Merge into master
 
 ### Versioning
 
