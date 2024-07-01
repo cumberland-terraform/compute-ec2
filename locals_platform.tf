@@ -12,7 +12,7 @@ locals {
         NewBuild                = var.ec2_config.tags.new_build
         Domain                  = upper(var.ec2_config.tags.domain)
         OS                      = local.os
-    }, module.platform.tags.compute.ec2)
+    }, module.platform.tags)
 
     ## EC2 PLATFORM DEFAULTS
     #   These are platform specific configuration options. They should only need
