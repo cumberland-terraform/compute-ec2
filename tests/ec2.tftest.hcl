@@ -5,7 +5,11 @@ provider "aws" {
 }
 
 variables {
-    ec2_config.tags.owner == "AWS DevOps Team"                
+    ec2_config{
+        tags {
+            owner="AWS DevOps Team" 
+        }
+    }               
         
 }
 
