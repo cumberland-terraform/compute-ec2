@@ -21,17 +21,17 @@ variables {
             new_build                       = true
             schedule                        = "never"
             rhel_repo                       = "NA"
-    }
-  }
+            }
+          }
+
     vpc_config                          = {
         availability_zone                   = "C"
-        id                                  = data.aws_vpc.vpc.id
-        subnet_id                           = data.aws_subnet.ec2_subnet.id
+        id                                  = "N/A"
+        subnet_id                           = "N/A"
         security_group_ids                  = [
-            data.aws_security_group.dmem_security_group.id,
-            data.aws_security_group.rhel_security_group.id
-        ]
-    }
+          "N/A"
+          ]
+        }
     platform                            = {
         core_aws_id                         = "545019462778"
         tenant_aws_id                       = "798223307841"
@@ -43,7 +43,7 @@ variables {
         app                                 = "TERRAFORM ENTERPRISE"
         app_env                             = "DEVELOPMENT 1"
         pca                                 = "FE110"
-    }
+        }
 }     
 
 
