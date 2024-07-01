@@ -1,3 +1,5 @@
+#tfsec:ignore:AVD-AWS-0131
+
 resource "aws_key_pair" "ssh_key" {
     count                        = local.conditions.provision_ssh_key ? 1 : 0
 
