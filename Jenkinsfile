@@ -1,4 +1,5 @@
 pipeline {
+	
 	agent { 
 		label 'jenkins-slave-java' 
 	}
