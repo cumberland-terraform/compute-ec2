@@ -13,12 +13,6 @@ provider "aws" {
     region                  = "us-east-1"
 }
 
-data "aws_vpc" "vpc" {
-    filter {
-        name        = "tag:Name"
-        values      = ["MDT-IEG-E1-POC-APP"]
-    }
-}
 
 variables {
     ec2_config = {
@@ -42,7 +36,7 @@ variables {
 
     vpc_config                          = {
         availability_zone                   = "C"
-        id                                  = "data.aws_vpc.vpc.id"
+        id                                  = "vpc-095012aae01b8551a"
         subnet_id                           = "N/A"
         security_group_ids                  = [
           "N/A"
