@@ -1,7 +1,23 @@
 # valid_string_concat.tftest.hcl
 provider "aws" {
+    region                  = "us-east-1"
+
+    assume_role {
+        role_arn            = "arn:aws:iam::798223307841:role/IMR-MDT-TERA-EC2"
+    }
+
+}
+
+provider "aws" {
     alias                   = "core"
     region                  = "us-east-1"
+}
+
+data "aws_vpc" "vpc" {
+    filter {
+        name        = "tag:Name"
+        values      = ["MDT-IEG-E1-POC-APP"]
+    }
 }
 
 variables {
@@ -26,7 +42,7 @@ variables {
 
     vpc_config                          = {
         availability_zone                   = "C"
-        id                                  = "N/A"
+        id                                  = "data.aws_vpc.vpc.id"
         subnet_id                           = "N/A"
         security_group_ids                  = [
           "N/A"
@@ -52,7 +68,7 @@ run "validate_tag" {
   command                                   = plan
 
   assert {
-    condition                               = instance.tags.Owner == "AWS DevOps Team"
+    condition                               = aws_instance.instance.tags.Owner == "AWS DevOps Team"
     error_message                           = "Owner Tag did not match input"
   }
 
