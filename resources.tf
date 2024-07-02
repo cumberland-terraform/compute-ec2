@@ -132,7 +132,7 @@ resource "aws_instance" "instance" {
     #     }
     # }
 }
-output "instance" {
+output "instance_object" {
     sensitive                               = true
     value                                   = aws_instance.instance
 }
