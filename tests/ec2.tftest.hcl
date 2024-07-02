@@ -56,11 +56,6 @@ variables {
         }
 }
 
-output "instance" {
-    value                                   = aws_instance.instance
-}
-
-
 
 run "validate_tag" {
 
