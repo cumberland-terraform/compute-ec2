@@ -54,7 +54,12 @@ variables {
         app_env                             = "DEVELOPMENT 1"
         pca                                 = "FE110"
         }
-}     
+}
+
+output "instance" {
+    value                                   = aws_instance.instance
+}
+
 
 
 run "validate_tag" {
