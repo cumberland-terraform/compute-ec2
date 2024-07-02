@@ -62,7 +62,7 @@ run "validate_tag" {
   command                                   = plan
 
   assert {
-    condition                               = instance.tags.Owner == "AWS DevOps Team"
+    condition                               = aws_instance.instance.tags.Owner == "AWS DevOps Team"
     error_message                           = "Owner Tag did not match input"
   }
 
