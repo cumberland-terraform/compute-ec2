@@ -1,4 +1,3 @@
-# valid_string_concat.tftest.hcl
 provider "aws" {
     region                  = "us-east-1"
 
@@ -62,7 +61,7 @@ run "validate_tag" {
   command                                   = plan
 
   assert {
-    condition                               = instance_object.tags.Owner == "AWS DevOps Team"
+    condition                               = instance.tags.Owner == "AWS DevOps Team"
     error_message                           = "Owner Tag did not match input"
   }
 
