@@ -58,7 +58,7 @@ variables {
 
 run "validate_tag" {
 
-  command                                   = plan
+  command                                   = apply
 
   assert {
     condition                               = aws_instance.instance.tags.Owner == "AWS DevOps Team"
