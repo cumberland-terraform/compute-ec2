@@ -14,7 +14,6 @@ module "kms" {
   platform              = var.platform
 }
 
-# TODO: secret provision
 module "secret" {
   count                 = local.conditions.provision_ssh_key ? 1 : 0
   source                = "git::ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-core-security-sm.git"
@@ -22,6 +21,7 @@ module "secret" {
   secret_config         = {
     secret_value        = tls_private_key.rsa[0].private_key_pem
     suffix              = "EC2-PEM"
+    kms_key_id          = local.kms_key_id
   }
   platform              = var.platform
 }
