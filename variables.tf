@@ -1,8 +1,8 @@
 variable "platform" {
   description       = "Platform configuration metadata."
   type              = object({
-    core_aws_id     = string
-    tenant_aws_id   = string
+    core_aws_id     = string # TODO: look this up instead of pass ing
+    tenant_aws_id   = string # TODO: look this up instead of passing in
     aws_region      = string 
     account         = string
     acct_env        = string
@@ -11,18 +11,17 @@ variable "platform" {
     app             = string
     app_env         = string
     pca             = string
+    subnet_type     = string
+    domain          = string
   })
 }
 
 variable "vpc_config" {
   description                           = "VPC configuration for host deployment."
   type = object({
-      id                                = string
-      subnet_id                         = string
       availability_zone                 = string
       security_group_ids                = list(string)
   })
-  sensitive                             = true
 }
 
 
@@ -37,15 +36,16 @@ variable "ec2_config" {
       application                       = string
       builder                           = string
       contact                           = string
-      schedule                          = string
       rhel_repo                         = string
-      domain                            = string
       owner                             = string
       purpose                           = string
-      new_build                         = bool
-      auto_backup                       = bool 
+      schedule                          = optional(string, "never")
+      new_build                         = optional(bool, true)
+      auto_backup                       = optional(bool, false) 
     })
     # `root_block_device`: configuration for root volume
+    #     NOTE: this currently does nothing, since volumes are baked
+    #     into the underlying AMI. 
     root_block_device                   = optional(
                                             object({
                                               volume_type   = string
@@ -57,6 +57,8 @@ variable "ec2_config" {
                                             }
                                         )
     # `ebs_block_devices`: list of volumes to attach
+    #     NOTE: this currently does nothing, since volumes are baked
+    #     into the underlying AMI. 
     ebs_block_devices                   = optional(
                                             list(
                                               object({
@@ -68,8 +70,8 @@ variable "ec2_config" {
                                           [])
     type                                = optional(string, "t3.xlarge")
     ssh_key_name                        = optional(string, null)
+    suffix                              = optional(string, "") 
     kms_key_id                          = optional(string, null)
-    public                              = optional(bool, false)
     provision_sg                        = optional(bool, false)
   })
 

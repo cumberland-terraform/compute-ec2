@@ -23,9 +23,9 @@ resource "local_file" "tf-key" {
 
 
 resource "aws_security_group" "remote_access_sg" {
-    count                       = var.ec2_config.provision_sg ? 1 : 0
+    count                       = local.conditions.provision_sg ? 1 : 0
 
-    name                        = module.platform.prefixes.security.group
+    name                        = "${module.platform.prefixes.security.group}-EC2"
     description                 = "${module.platform.prefixes.compute.ec2.instance} security group"
     vpc_id                      = var.vpc_config.id
     tags                        = local.tags
@@ -33,7 +33,7 @@ resource "aws_security_group" "remote_access_sg" {
 
 
 resource "aws_security_group_rule" "remote_access_ingress" {
-    count                       = var.ec2_config.provision_sg ? 1 : 0
+    count                       = local.conditions.provision_sg ? 1 : 0
 
     description                 = "Restrict access to VPC CIDR block"
     type                        = "ingress"
@@ -46,7 +46,7 @@ resource "aws_security_group_rule" "remote_access_ingress" {
 
 
 resource "aws_security_group_rule" "remote_access_egress" {
-    count                       = var.ec2_config.provision_sg ? 1 : 0
+    count                       = local.conditions.provision_sg ? 1 : 0
 
     description                 = "Allow all outgoing traffic"
     type                        = "egress"
@@ -57,48 +57,29 @@ resource "aws_security_group_rule" "remote_access_egress" {
     security_group_id           = aws_security_group.remote_access_sg[count.index].id
 }
 
-
-resource "aws_eip" "bastion_ip" {
-    count                       = var.ec2_config.public ? 1 : 0
-    tags                        = local.tags
-}
-
-
-resource "aws_eip_association" "eip_assoc" {
-    count                       = var.ec2_config.public ? 1 : 0
-
-    instance_id                 = aws_instance.instance.id
-    allocation_id               = aws_eip.bastion_ip[0].id
-}
-
 #tfsec:ignore:AVD-AWS-0131
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
-    associate_public_ip_address = var.ec2_config.public
+    associate_public_ip_address = local.conditions.is_public
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
     iam_instance_profile        = var.ec2_config.instance_profile
     instance_type               = var.ec2_config.type
     monitoring                  = local.ec2_defaults.monitoring
-    subnet_id                   = var.vpc_config.subnet_id
+    # TODO: there could be multiple subnets in a given availability zone.
+    #       the next line is simply taking the first one it finds. should 
+    #       probably randomize the selection (i.e. choose a random number
+    #       between 0 and (n-1), where n is `length(module.platform.subnets.id)`)
+    subnet_id                   = module.platform.subnets.ids[0]
     tags                        = local.tags
-    user_data                   = templatefile(
-                                    local.userdata_path,
-                                    local.userdata_config
-                                )
-    vpc_security_group_ids      = var.ec2_config.provision_sg ? concat(
-                                    [ aws_security_group.remote_access_sg[0].id ],
-                                    var.vpc_config.security_group_ids
-                                ) : (
-                                    var.vpc_config.security_group_ids
-                                )                                 
-
+    user_data                   = local.user_data
+    vpc_security_group_ids      = local.vpc_security_group_ids
     lifecycle {
         # TF is interpretting the tag calculations as a modification everytime 
         #   a plan is run, so ignore until issue is resuled.
         ignore_changes          = [ tags ]
     }
-    # ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/6/27
+    # ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
     #   bootstrap hydrates from metadata server!
     
     # metadata_options {
@@ -108,7 +89,7 @@ resource "aws_instance" "instance" {
 
     # CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
     #   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
-    #   AMI MAPPINGS, FORCING REDEPLOYMENT! 
+    #   AMI MAPPINGS, FORCING REDEPLOYMENT! - Grant Moore, 2024/06/27
 
     # root_block_device {
     #     encrypted               = local.ec2_defaults.encrypted
@@ -131,8 +112,4 @@ resource "aws_instance" "instance" {
     #         volume_type         = ebs_block_device.value.volume_type
     #     }
     # }
-}
-output "instance_object" {
-    sensitive                               = true
-    value                                   = aws_instance.instance
 }
