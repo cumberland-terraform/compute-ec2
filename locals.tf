@@ -41,8 +41,8 @@ locals {
     baseline_vpc_sg_ids         = local.conditions.is_windows ? [
                                     # TODO: figureo out windows security groups
                                 ] : [
-                                    module.platform.network.ec2.security_groups.linux.dmem.id, 
-                                    module.platform.network.ec2.security_groups.linux.rhel.id 
+                                    module.platform.network.security_groups.dmem.id, 
+                                    module.platform.network.security_groups.rhel.id 
                                 ]
     vpc_security_group_ids      = local.conditions.provision_sg ? concat(
                                     [ aws_security_group.remote_access_sg[0].id ],
