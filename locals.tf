@@ -18,11 +18,11 @@ locals {
     # NOTE: `is_rhel` is not the negation of `is_windows`, because MDThink also supports
     #           AMZN2 Linux distros.
     conditions                  = {
-        provision_ssh_key       = var.ec2_config.ssh_key_name == null
-        provision_kms_key       = var.ec2_config.kms_key_id == null
-        provision_sg            = var.ec2_config.provision_sg
-        is_windows              = strcontains(var.ec2_config.operating_system, "Windows")
-        is_rhel                 = strcontains(var.ec2_config.operating_system, "RHEL")
+        provision_ssh_key       = var.ec2.ssh_key_name == null
+        provision_kms_key       = var.ec2.kms_key_id == null
+        provision_sg            = var.ec2.provision_sg
+        is_windows              = strcontains(var.ec2.operating_system, "Windows")
+        is_rhel                 = strcontains(var.ec2.operating_system, "RHEL")
         is_public               = strcontains(upper(var.platform.subnet_type), "PUB")
     }
 
@@ -31,12 +31,12 @@ locals {
     kms_key_id                  = local.conditions.provision_kms_key ? (
                                     module.kms[0].key.id
                                 ) : (
-                                    var.ec2_config.kms_key_id
+                                    var.ec2.kms_key_id
                                 )
     ssh_key_name                = local.conditions.provision_ssh_key ? (
                                     aws_key_pair.ssh_key[0].key_name 
                                 ) : ( 
-                                    var.ec2_config.ssh_key_name
+                                    var.ec2.ssh_key_name
                                 )
     baseline_vpc_sg_ids         = local.conditions.is_windows ? [
                                     # TODO: figureo out windows security groups
@@ -72,20 +72,20 @@ locals {
     os                          = local.conditions.is_windows ? (
                                     "Windows" # inconsistent tagging conventions between OSs.
                                 ) : (
-                                    var.ec2_config.operating_system
+                                    var.ec2.operating_system
                                 )
 
     tags                        = merge({
-        Name                    = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2_config.suffix}"
-        Builder                 = var.ec2_config.tags.builder
-        Owner                   = var.ec2_config.tags.owner
-        Application             = var.ec2_config.tags.application
-        Purpose                 = var.ec2_config.tags.purpose
-        RhelRepo                = var.ec2_config.tags.rhel_repo
-        Schedule                = var.ec2_config.tags.schedule
-        AutoBackup              = var.ec2_config.tags.auto_backup
-        PrimaryContact          = var.ec2_config.tags.contact
-        NewBuild                = var.ec2_config.tags.new_build
+        Name                    = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
+        Builder                 = var.ec2.tags.builder
+        Owner                   = var.ec2.tags.owner
+        Application             = var.ec2.tags.application
+        Purpose                 = var.ec2.tags.purpose
+        RhelRepo                = var.ec2.tags.rhel_repo
+        Schedule                = var.ec2.tags.schedule
+        AutoBackup              = var.ec2.tags.auto_backup
+        PrimaryContact          = var.ec2.tags.contact
+        NewBuild                = var.ec2.tags.new_build
         OS                      = local.os
     }, module.platform.tags)
 
@@ -94,7 +94,7 @@ locals {
     ami_filters                 = local.conditions.is_rhel ? [
         {
             "key"               = "tag:OS",
-            "value"             = [ var.ec2_config.operating_system ]
+            "value"             = [ var.ec2.operating_system ]
         },
         {
             "key"               = "tag:Application"
@@ -103,7 +103,7 @@ locals {
     ] : [
         {
             "key"               = "tag:OS",
-            "value"             = [ var.ec2_config.operating_system ]
+            "value"             = [ var.ec2.operating_system ]
         },
         {
             "key"               = "tag:Purpose"

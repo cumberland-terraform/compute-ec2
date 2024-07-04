@@ -63,8 +63,8 @@ resource "aws_instance" "instance" {
     associate_public_ip_address = local.conditions.is_public
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
-    iam_instance_profile        = var.ec2_config.instance_profile
-    instance_type               = var.ec2_config.type
+    iam_instance_profile        = var.ec2.instance_profile
+    instance_type               = var.ec2.type
     monitoring                  = local.ec2_defaults.monitoring
     # TODO: there could be multiple subnets in a given availability zone.
     #       the next line is simply taking the first one it finds. should 
@@ -94,13 +94,13 @@ resource "aws_instance" "instance" {
     # root_block_device {
     #     encrypted               = local.ec2_defaults.encrypted
     #     kms_key_id              = local.kms_key_id
-    #     volume_size             = var.ec2_config.root_block_device.volume_size
-    #     volume_type             = var.ec2_config.root_block_device.volume_type
+    #     volume_size             = var.ec2.root_block_device.volume_size
+    #     volume_type             = var.ec2.root_block_device.volume_type
     # }
 
     # dynamic "ebs_block_device" {
     #     for_each                = { 
-    #                                 for index, device in var.ec2_config.ebs_block_devices:
+    #                                 for index, device in var.ec2.ebs_block_devices:
     #                                 index => device
     #                             }
     #     content {

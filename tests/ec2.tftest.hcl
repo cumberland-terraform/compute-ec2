@@ -16,7 +16,7 @@ provider "aws" {
 run "validate_tag" {
 
   variables {
-    ec2_config = {
+    ec2 = {
         instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
         ssh_key_name                        = "MDTCoreUSEast1Virginia"
         operating_system                    = "RHEL7"
