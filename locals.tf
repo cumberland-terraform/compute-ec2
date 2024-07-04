@@ -13,8 +13,8 @@ locals {
     }
 
     ## CONDITIONS
-    #   This is a map containing booleans that correspond to different 
-    #       deployment configurations.\
+    #   Configuration object containing boolean calculations that correspond
+    #       to different deployment configurations.
     # NOTE: `is_rhel` is not the negation of `is_windows`, because MDThink also supports
     #           AMZN2 Linux distros.
     conditions                  = {
