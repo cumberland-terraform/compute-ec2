@@ -27,7 +27,7 @@ resource "aws_security_group" "remote_access_sg" {
 
     name                        = "${module.platform.prefixes.security.group}-EC2"
     description                 = "${module.platform.prefixes.compute.ec2.instance} security group"
-    vpc_id                      = var.vpc_config.id
+    vpc_id                      = module.platform.network.vpc.id
     tags                        = local.tags
 }
 
@@ -40,7 +40,7 @@ resource "aws_security_group_rule" "remote_access_ingress" {
     from_port                   = 0
     to_port                     = 0
     protocol                    = "-1"
-    cidr_blocks                 = [ data.aws_vpc.vpc.cidr_block ]
+    cidr_blocks                 = [ module.platform.network.vpc.cidr_block ]
     security_group_id           = aws_security_group.remote_access_sg[count.index].id
 } 
 
