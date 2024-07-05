@@ -10,6 +10,7 @@ variable "platform" {
     app_env                   = string
     pca                       = string
     domain                    = string
+    subnet_type               = string
   })
 }
 
