@@ -70,7 +70,7 @@ resource "aws_instance" "instance" {
     #       the next line is simply taking the first one it finds. should 
     #       probably randomize the selection (i.e. choose a random number
     #       between 0 and (n-1), where n is `length(module.platform.subnets.id)`)
-    subnet_id                   = module.platform.subnets.ids[0]
+    subnet_id                   = module.platform.network.subnets.ids[0]
     tags                        = local.tags
     user_data                   = local.user_data
     vpc_security_group_ids      = local.vpc_security_group_ids
