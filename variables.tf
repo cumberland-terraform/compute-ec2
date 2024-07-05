@@ -22,7 +22,7 @@ variable "ec2" {
     tags                          = object({
       application                 = string
       builder                     = string
-      contact                     = string
+      primary_contact             = string
       owner                       = string
       purpose                     = string
       rhel_repo                   = optional(string, "NA")

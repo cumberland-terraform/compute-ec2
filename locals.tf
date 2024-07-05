@@ -79,7 +79,7 @@ locals {
         RhelRepo                = var.ec2.tags.rhel_repo
         Schedule                = var.ec2.tags.schedule
         AutoBackup              = var.ec2.tags.auto_backup
-        PrimaryContact          = var.ec2.tags.contact
+        PrimaryContact          = var.ec2.tags.primary_contact
         NewBuild                = var.ec2.tags.new_build
         OS                      = local.os
     }, module.platform.tags)
