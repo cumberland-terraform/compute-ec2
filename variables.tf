@@ -51,7 +51,7 @@ variable "ec2" {
   })
 
   validation {
-    condition                     = containts([
+    condition                     = contains([
                                     "A", "B", "C", "D"
                                   ], var.ec2.availability_zone)
     error_message                 = "Valid values: (A, B, C, D)"
