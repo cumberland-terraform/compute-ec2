@@ -43,7 +43,7 @@ locals {
                                     ], var.ec2.additional_security_group_ids) : concat([
                                         module.platform.network.security_groups.dmem.id, 
                                         module.platform.network.security_groups.rhel.id 
-                                    ], var.ec2.security_group_ids)
+                                    ], var.ec2.additional_security_group_ids)
     vpc_security_group_ids      = local.conditions.provision_sg ? concat(
                                     [ aws_security_group.remote_access_sg[0].id ],
                                     local.baseline_vpc_sg_ids

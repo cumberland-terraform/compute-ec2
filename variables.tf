@@ -30,7 +30,7 @@ variable "ec2" {
       new_build                   = optional(bool, true)
       auto_backup                 = optional(bool, false) 
     })
-    additional_security_group_ids = optional(list(string), null)
+    additional_security_group_ids = optional(list(string), [])
     root_block_device             = optional(object({
                                       volume_type   = string
                                       volume_size   = number
