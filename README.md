@@ -1,21 +1,76 @@
 # Enterprise Terraform 
-## AWS Core Compute
-### EC2
+## AWS Core Compute Elastic Compute Cloud
+### Overview
 
-Documentation goes here.
+This is the baseline module for a standalone **EC2** instance on the **MDThink Platform**. It has been setup with ease of deployment in mind, so that platform compliant compute space be provisioned at the drop of a hat.
 
 ### Usage
 
-```
-module "mymodule" {
-	source          = "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute.git"
-	
-	# vars go here
+The bare minimum deployment can be achieved with the following configuration,
 
+```
+module "server" {
+	source          		= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
+	
+	platform				= {
+		aws_region          = "<region-name>"
+        account             = "<account-name>"
+        acct_env            = "<account-environment>"
+        agency              = "<agency>"
+        program             = "<program>"
+        app_env             = "<application-environment>"
+        domain              = "<active-directory-domain>"
+        pca                 = "<pca-code>"
+		subnet_tye 			= "<subnet-type>"
+	}
+
+	ec2						= {
+		operating_system	= "<RHEL8/RHEL7/Windows2012R2/Windows2016/Windows2019/Windows2022>"
+		availability_zone 	= "<A/B/C/D>
+		tags 				= {
+			application 	= "<Application Name>"
+			builder 		= "<Builder Name>"
+			primary_contact	= "<Contact Information>"
+			owner 			= "<Owner Information>"
+			purpose 		= "<Description of Purpose>"
+		}
+	}
 }
 ```
 
+`platform` is a parameter for *all* **MDThink Enterprise Terraform** modules. For more information about the `platform`, in particular the permitted values of the nested fields, see the [mdt-eter-platform documentation](https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-platform/browse). The following section goes into more detail regarding the `ec2` variable.
+
+### Parameters
+
+The `ec2` object represents the configuration for a new deployment. Only three fields are absolutely required: `operating_system`, `availability_zone` and `tags`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object and their purpose,
+
+- `operating_system`: (*Required*)
+- `availability_zone`: (*Required*)
+- `tags`: (*Required*)
+	- `application`: Designates the application running on the server.
+	- `builder`: Person or process responsible for provisioning.
+	- `primary_contact`: Contact information for the owner of the instance.
+	- `owner`: Name of the owner.
+	- `purpose`: Description of the server. 
+	- `rhel_repo`: (*Optional*) Defaults to *NA*
+	- `schedule`: (*Optional*) Defaults to *never*.
+	- `new_build`: (*Optional*). Boolean flagging instance as new. Defaults to `true`.
+	- `auto_backup`: (*Optional*): Boolean flagging instance for automated backup. Defaults to `false`.
+- `additional_security_group_ids`: (*Optional*) A list of IDs for the security groups into which the new instance will be deployed. *NOTE*: The instance will be deployed into platform security groups (such as *DMEM* and *RHEL*) automatically, so this list should only contain application specific security groups.
+- `root_block_device`: (*Optional*) Object that represents the configuration for the root block device. *NOTE*: this variable currently does nothing, as the root block device is backed into the AMI during the image build.
+	- `volume_type`:
+	- `volume_size`:
+- `ebs_block_devices`: (*Optional*)
+- `instance_profile`: (*Optional*) The name of the instance profile for the instance to assume. If not provided, this will default to the `IMR-*-NEWBUILD-EC2` role for the target account.
+- `type`: (*Optional*) Type of the instance to deploy. Defaults to `t3.xlarge`. 
+- `ssh_key_name`: (*Optional*) Name of the AWS managed PEM to associate with the instance. If no key name is provided, a new SSH key will be generated and stored in the AWS secret manager with the appropriate platform prefix.
+- `suffix`: (*Optional*) Suffix to append to name of the instance. Defaults to a blank string.
+- `kms_key_id`: (*Optional*) Physical ID of a KMS key used to encrypt block devices. If no KMS key id is provided, a new KMS key will be provisioned and access will be provided to the instance profile IAM role.
+- `provision_sg`: (*Optional*) A boolean flag to signal to the module to provision a new security group for the instance that allows ingress from all addresses in the target VPC. Defaults to `false`, i.e. no security group is provisioned by default.
+
 ## Contributing
+
+TODO
 
 ### Development
 

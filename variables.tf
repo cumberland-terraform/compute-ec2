@@ -1,23 +1,22 @@
 variable "platform" {
-  description                 = "Platform configuration metadata."
-  type                        = object({
-    aws_region                = string 
-    account                   = string
-    acct_env                  = string
-    agency                    = string
-    program                   = string
-    app                       = string
-    app_env                   = string
-    pca                       = string
-    domain                    = string
-    subnet_type               = string
+  description                     = "Platform metadata configuration object. See platform module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-platform/browse) for detailed information about the permitted values for each field."
+  type                            = object({
+    aws_region                    = string 
+    account                       = string
+    acct_env                      = string
+    agency                        = string
+    program                       = string
+    app                           = string
+    app_env                       = string
+    pca                           = string
+    domain                        = string
+    subnet_type                   = string
   })
 }
 
 variable "ec2" {
-  description                     = "Configuration for the host environment."
+  description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
   type = object({
-    instance_profile              = string
     operating_system              = string
     availability_zone             = string
     tags                          = object({
@@ -44,11 +43,12 @@ variable "ec2" {
                                     volume_type   = string
                                     volume_size   = number
                                   })), [])
+    instance_profile              = optional(string, null)
     type                          = optional(string, "t3.xlarge")
     ssh_key_name                  = optional(string, null)
     suffix                        = optional(string, "") 
     kms_key_id                    = optional(string, null)
-    provision_sg                  = optional(bool, false)
+    provision_sg                  = optional(bool, false)  
   })
 
   validation {
