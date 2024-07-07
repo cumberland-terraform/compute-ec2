@@ -2,7 +2,7 @@
 ## AWS Core Compute Elastic Compute Cloud
 ### Overview
 
-This is the baseline module for a standalone **EC2** instance on the **MDThink Platform**. It has been setup with ease of deployment in mind, so that platform compliant compute space be provisioned at the drop of a hat.
+This is the baseline module for a standalone **EC2** instance on the **MDThink Platform**. It has been setup with ease of deployment in mind, so that platform compliant storage space be easily provisioned with minimum configuration.
 
 ### Usage
 
@@ -42,11 +42,11 @@ module "server" {
 
 ### Parameters
 
-The `ec2` object represents the configuration for a new deployment. Only three fields are absolutely required: `operating_system`, `availability_zone` and `tags`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object and their purpose,
+The `ec2` object represents the configuration for a new deployment. Only three fields are absolutely required: `operating_system`, `availability_zone` and `tags`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object fields and their purpose,
 
 - `operating_system`: (*Required*)
 - `availability_zone`: (*Required*)
-- `tags`: (*Required*)
+- `tags`: (*Required*) Tag configuration object.
 	- `application`: Designates the application running on the server.
 	- `builder`: Person or process responsible for provisioning.
 	- `primary_contact`: Contact information for the owner of the instance.
@@ -58,9 +58,9 @@ The `ec2` object represents the configuration for a new deployment. Only three f
 	- `auto_backup`: (*Optional*): Boolean flagging instance for automated backup. Defaults to `false`.
 - `additional_security_group_ids`: (*Optional*) A list of IDs for the security groups into which the new instance will be deployed. *NOTE*: The instance will be deployed into platform security groups (such as *DMEM* and *RHEL*) automatically, so this list should only contain application specific security groups.
 - `root_block_device`: (*Optional*) Object that represents the configuration for the root block device. *NOTE*: this variable currently does nothing, as the root block device is backed into the AMI during the image build.
-	- `volume_type`:
-	- `volume_size`:
-- `ebs_block_devices`: (*Optional*)
+	- `volume_type`: (*Required*) Type of volume to be provisioned.
+	- `volume_size`: (*Required*) Size of the volume to be provisioned.
+- `ebs_block_devices`: (*Optional*) List of block devices to attach to the EC2. 
 - `instance_profile`: (*Optional*) The name of the instance profile for the instance to assume. If not provided, this will default to the `IMR-*-NEWBUILD-EC2` role for the target account.
 - `type`: (*Optional*) Type of the instance to deploy. Defaults to `t3.xlarge`. 
 - `ssh_key_name`: (*Optional*) Name of the AWS managed PEM to associate with the instance. If no key name is provided, a new SSH key will be generated and stored in the AWS secret manager with the appropriate platform prefix.
