@@ -13,14 +13,6 @@ variable "platform" {
     subnet_type                   = string
     availability_zones            = list(string)
   })
-
-  validation {
-    condition                     = contains([
-                                    "A01", "B01", "C01", "D01"
-                                  ], var.platform.availability_zone)
-    error_message                 = "Valid values: (A01, B01, C01, D01)"
-  }
-
 }
 
 
@@ -28,7 +20,6 @@ variable "ec2" {
   description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
   type = object({
     operating_system              = string
-    availability_zone             = string
     tags                          = object({
       application                 = string
       builder                     = string
