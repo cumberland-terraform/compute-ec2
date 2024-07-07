@@ -74,6 +74,7 @@ resource "aws_instance" "instance" {
     tags                        = local.tags
     user_data                   = local.user_data
     vpc_security_group_ids      = local.vpc_security_group_ids
+    
     lifecycle {
         # TF is interpretting the tag calculations as a modification everytime 
         #   a plan is run, so ignore until issue is resuled.
