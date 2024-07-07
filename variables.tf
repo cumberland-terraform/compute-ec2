@@ -11,8 +11,18 @@ variable "platform" {
     pca                           = string
     domain                        = string
     subnet_type                   = string
+    availability_zones            = list(string)
   })
+
+  validation {
+    condition                     = contains([
+                                    "A01", "B01", "C01", "D01"
+                                  ], var.platform.availability_zone)
+    error_message                 = "Valid values: (A01, B01, C01, D01)"
+  }
+
 }
+
 
 variable "ec2" {
   description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
@@ -50,13 +60,6 @@ variable "ec2" {
     kms_key_id                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
   })
-
-  validation {
-    condition                     = contains([
-                                    "A", "B", "C", "D"
-                                  ], var.ec2.availability_zone)
-    error_message                 = "Valid values: (A, B, C, D)"
-  }
   
   validation {
     condition                     = contains([
