@@ -80,16 +80,16 @@ resource "aws_instance" "instance" {
         #   a plan is run, so ignore until issue is resuled.
         ignore_changes          = [ tags ]
     }
-    # ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
-    #   bootstrap hydrates from metadata server!
+    ## ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
+    ##   bootstrap hydrates from metadata server!
     
     # metadata_options {
     #     http_endpoint           = "enabled"
     #     http_tokens             = "required"
     # }
 
-    # CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
-    #   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
+    ## CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
+    ##   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
     #   AMI MAPPINGS, FORCING REDEPLOYMENT! - Grant Moore, 2024/06/27
 
     # root_block_device {

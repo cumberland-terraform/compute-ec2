@@ -46,9 +46,9 @@ locals {
                                         module.platform.network.security_groups.rhel.id 
                                     ], var.ec2.additional_security_group_ids)
     vpc_security_group_ids          = local.conditions.provision_sg ? concat(
-                                    [ aws_security_group.remote_access_sg[0].id ],
-                                    local.baseline_vpc_sg_ids
-                                ) : local.baseline_vpc_sg_ids
+                                        [ aws_security_group.remote_access_sg[0].id ],
+                                        local.baseline_vpc_sg_ids
+                                    ) : local.baseline_vpc_sg_ids
 
     user_data_path                  = local.conditions.is_rhel ? (
                                         # RHEL ```user-data``` EXTENSION
