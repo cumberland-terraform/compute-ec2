@@ -60,7 +60,7 @@ resource "aws_security_group_rule" "remote_access_egress" {
 #tfsec:ignore:AVD-AWS-0131
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
-    associate_public_ip_address = local.conditions.is_public
+    associate_public_ip_address = local.ec2_defaults.associate_public_ip_address
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
     iam_instance_profile        = var.ec2.instance_profile
