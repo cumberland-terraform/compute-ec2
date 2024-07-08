@@ -85,6 +85,8 @@ locals {
         OS                          = local.os
     }, module.platform.tags)
 
+    # TODO: calculate default instance profile if null is passed in!
+    
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                     = local.conditions.is_rhel ? [
