@@ -2,7 +2,7 @@
 ## AWS Core Compute Elastic Compute Cloud
 ### Overview
 
-This is the baseline module for a standalone **EC2** instance on the **MDThink Platform**. It has been setup with ease of deployment in mind, so that platform compliant storage space be easily provisioned with minimum configuration.
+This is the baseline module for a standalone **EC2** instance on the **MDThink Platform**. It has been setup with ease of deployment in mind, so that platform compliant compute space be easily provisioned with minimum configuration.
 
 ### Usage
 
