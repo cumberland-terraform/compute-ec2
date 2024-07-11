@@ -32,20 +32,22 @@ variable "ec2" {
     })
     additional_security_group_ids = optional(list(string), [])
     root_block_device             = optional(object({
-                                      volume_type   = string
-                                      volume_size   = number
-                                    }),{
-                                      volume_type   = "gp3"
-                                      volume_size   = 10
-                                  })
+      volume_type                 = string
+      volume_size                 = number
+    }),{
+        # <DEFAULT VALUES: `root_block_device`>
+        volume_type               = "gp3"
+        volume_size               = 10
+        # </DEFAULT VALUES: `root_block_device`>
+    })
     ebs_block_devices             = optional(list(object({
-                                    device_name   = string
-                                    volume_type   = string
-                                    volume_size   = number
-                                  })), [])
+      device_name                 = string
+      volume_type                 = string
+      volume_size                 = number
+    })), [])
     instance_profile              = optional(string, null)
     type                          = optional(string, "t3.xlarge")
-    ssh_key_name                  = optional(string, null)
+    ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
     suffix                        = optional(string, "") 
     kms_key_id                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
