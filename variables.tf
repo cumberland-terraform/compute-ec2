@@ -21,7 +21,6 @@ variable "ec2" {
   type = object({
     operating_system              = string
     tags                          = object({
-      application                 = string
       builder                     = string
       primary_contact             = string
       owner                       = string
