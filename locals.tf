@@ -70,7 +70,7 @@ locals {
                                     ) : (
                                         var.ec2.operating_system
                                     )
-
+    # 1.Key=Agency&Tags.Tag.1.Value=MDT&Tags.Tag.10.Key=Environment&Tags.Tag.10.Value=NPR1&Tags.Tag.2.Key=PCA+Code&Tags.Tag.2.Value=FE110&Tags.Tag.3.Key=CreationDate&Tags.Tag.3.Value=2024-07-11&Tags.Tag.4.Key=Region&Tags.Tag.4.Value=E1&Tags.Tag.5.Key=Account&Tags.Tag.5.Value=IEG&Tags.Tag.6.Key=Owner&Tags.Tag.6.Value=AWS+DevOps+Team&Tags.Tag.7.Key=Application&Tags.Tag.7.Value=TERA&Tags.Tag.8.Key=Domain&Tags.Tag.8.Value=MDT.ENG&Tags.Tag.9.Key=Program&Tags.Tag.9.Value=MDT&Version=2014-10-31
     tags                            = merge({
         Name                        = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
         Builder                     = var.ec2.tags.builder
