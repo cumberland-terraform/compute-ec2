@@ -75,7 +75,6 @@ locals {
         Name                        = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
         Builder                     = var.ec2.tags.builder
         Owner                       = var.ec2.tags.owner
-        Application                 = var.ec2.tags.application
         Purpose                     = var.ec2.tags.purpose
         RhelRepo                    = var.ec2.tags.rhel_repo
         Schedule                    = var.ec2.tags.schedule
