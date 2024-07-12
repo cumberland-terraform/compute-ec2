@@ -63,7 +63,7 @@ resource "aws_instance" "instance" {
     associate_public_ip_address = local.ec2_defaults.associate_public_ip_address
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
-    iam_instance_profile        = var.ec2.instance_profile
+    iam_instance_profile        = local.iam_instance_profile
     instance_type               = var.ec2.type
     monitoring                  = local.ec2_defaults.monitoring
     # TODO: there could be multiple subnets in a given availability zone.

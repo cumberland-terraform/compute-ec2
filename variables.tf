@@ -45,12 +45,16 @@ variable "ec2" {
       volume_type                 = string
       volume_size                 = number
     })), [])
-    instance_profile              = optional(string, null)
+    iam_instance_profile          = optional(string, null)
     type                          = optional(string, "t3.xlarge")
     ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
     suffix                        = optional(string, "") 
-    kms_key_id                    = optional(string, null)
+    kms_key                       = optional(object({
+      id                          = string
+      arn                         = string
+    }), null)
     provision_sg                  = optional(bool, false)  
+    userdata                      = optional(string, null)
   })
   
   validation {

@@ -20,11 +20,13 @@ locals {
     #           AMZN2 Linux distros.
     conditions                      = {
         provision_ssh_key           = var.ec2.ssh_key_name == null
-        provision_kms_key           = var.ec2.kms_key_id == null
+        provision_kms_key           = var.ec2.kms_key == null
         provision_sg                = var.ec2.provision_sg
         is_windows                  = strcontains(var.ec2.operating_system, "Windows")
         is_rhel                     = strcontains(var.ec2.operating_system, "RHEL")
         is_public                   = strcontains(upper(var.platform.subnet_type), "PUB")
+        use_default_userdata        = var.ec2.userdata == null
+        use_default_iam             = var.ec2.iam_instance_profile
     }
 
     ## CALCULATED PROPERTIES
@@ -32,7 +34,7 @@ locals {
     kms_key_id                      = local.conditions.provision_kms_key ? (
                                         module.kms[0].key.id
                                     ) : (
-                                        var.ec2.kms_key_id
+                                        var.ec2.kms_key.id
                                     )
     ssh_key_name                    = local.conditions.provision_ssh_key ? (
                                         aws_key_pair.ssh_key[0].key_name 
@@ -45,32 +47,42 @@ locals {
                                         module.platform.network.security_groups.dmem.id, 
                                         module.platform.network.security_groups.rhel.id 
                                     ], var.ec2.additional_security_group_ids)
+                                    
     vpc_security_group_ids          = local.conditions.provision_sg ? concat(
                                         [ aws_security_group.remote_access_sg[0].id ],
                                         local.baseline_vpc_sg_ids
                                     ) : local.baseline_vpc_sg_ids
 
     user_data_path                  = local.conditions.is_rhel ? (
-                                        # RHEL ```user-data``` EXTENSION
+                                        # RHEL `user-data` path and extension
                                         "${path.module}/user-data/rhel/user-data.sh" 
                                     ) : (
-                                        # WINDOWS ```user-data``` EXTENSION
+                                        # Windows `user-data` path and extension
                                         "${path.module}/user-data/windows/user-data.ps1" 
                                     )
     user_data_config                = local.conditions.is_rhel ? {
-                                        # RHEL ```user-data``` CONFIGURATION
+                                        # RHEL `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     } : {
-                                        # WINDOWS ```user-data``` CONFIGURATION
+                                        # WINDOWS `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     }
-    user_data                       = templatefile(local.user_data_path, local.user_data_config)
+    user_data                       = local.conditions.use_default_userdata ? (
+                                        templatefile(local.user_data_path, local.user_data_config)
+                                    ) : var.ec2.userdata 
+
     os                              = local.conditions.is_windows ? (
                                         "Windows" # inconsistent tagging conventions between OSs.
                                     ) : (
                                         var.ec2.operating_system
                                     )
-    # 1.Key=Agency&Tags.Tag.1.Value=MDT&Tags.Tag.10.Key=Environment&Tags.Tag.10.Value=NPR1&Tags.Tag.2.Key=PCA+Code&Tags.Tag.2.Value=FE110&Tags.Tag.3.Key=CreationDate&Tags.Tag.3.Value=2024-07-11&Tags.Tag.4.Key=Region&Tags.Tag.4.Value=E1&Tags.Tag.5.Key=Account&Tags.Tag.5.Value=IEG&Tags.Tag.6.Key=Owner&Tags.Tag.6.Value=AWS+DevOps+Team&Tags.Tag.7.Key=Application&Tags.Tag.7.Value=TERA&Tags.Tag.8.Key=Domain&Tags.Tag.8.Value=MDT.ENG&Tags.Tag.9.Key=Program&Tags.Tag.9.Value=MDT&Version=2014-10-31
+
+    iam_instance_profile            = local.conditions.use_default_iam ? (
+                                        module.platform.prefixes.compute.ec2.profile
+                                    ) : (
+                                        var.ec2.iam_instance_profile
+                                    )
+
     tags                            = merge({
         Name                        = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
         Builder                     = var.ec2.tags.builder
@@ -85,7 +97,7 @@ locals {
     }, module.platform.tags)
 
     # TODO: calculate default instance profile if null is passed in!
-    
+
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                     = local.conditions.is_rhel ? [
