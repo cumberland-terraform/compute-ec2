@@ -53,6 +53,7 @@ variable "ec2" {
       id                          = string
       arn                         = string
     }), null)
+    private_ip                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
     userdata                      = optional(string, null)
   })

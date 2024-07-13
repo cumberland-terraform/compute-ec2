@@ -66,6 +66,7 @@ resource "aws_instance" "instance" {
     iam_instance_profile        = local.iam_instance_profile
     instance_type               = var.ec2.type
     monitoring                  = local.ec2_defaults.monitoring
+    private_ip                  = var.ec2.private_ip
     # TODO: there could be multiple subnets in a given availability zone.
     #       the next line is simply taking the first one it finds. should 
     #       probably randomize the selection (i.e. choose a random number
