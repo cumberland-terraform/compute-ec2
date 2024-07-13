@@ -33,14 +33,12 @@ locals {
     #   Variables that change based on deployment configuration. 
     kms_key_id                      = local.conditions.provision_kms_key ? (
                                         module.kms[0].key.id
-                                    ) : (
-                                        var.ec2.kms_key.id
-                                    )
+                                    ) : var.ec2.kms_key.id
+
     ssh_key_name                    = local.conditions.provision_ssh_key ? (
                                         aws_key_pair.ssh_key[0].key_name 
-                                    ) : ( 
-                                        var.ec2.ssh_key_name
-                                    )
+                                    ) : var.ec2.ssh_key_name
+
     baseline_vpc_sg_ids             = local.conditions.is_windows ? concat([
                                     # TODO: figure out windows security groups
                                     ], var.ec2.additional_security_group_ids) : concat([
@@ -53,35 +51,31 @@ locals {
                                         local.baseline_vpc_sg_ids
                                     ) : local.baseline_vpc_sg_ids
 
-    user_data_path                  = local.conditions.is_rhel ? (
+    userdata_path                  = local.conditions.is_rhel ? (
                                         # RHEL `user-data` path and extension
                                         "${path.module}/user-data/rhel/user-data.sh" 
                                     ) : (
                                         # Windows `user-data` path and extension
                                         "${path.module}/user-data/windows/user-data.ps1" 
                                     )
-    user_data_config                = local.conditions.is_rhel ? {
+    userdata_config                = local.conditions.is_rhel ? {
                                         # RHEL `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     } : {
                                         # WINDOWS `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     }
-    user_data                       = local.conditions.use_default_userdata ? (
-                                        templatefile(local.user_data_path, local.user_data_config)
+    userdata                       = local.conditions.use_default_userdata ? (
+                                        templatefile(local.userdata_path, local.userdata_config)
                                     ) : var.ec2.userdata 
 
     os                              = local.conditions.is_windows ? (
                                         "Windows" # inconsistent tagging conventions between OSs.
-                                    ) : (
-                                        var.ec2.operating_system
-                                    )
+                                    ) : var.ec2.operating_system
 
     iam_instance_profile            = local.conditions.use_default_iam ? (
                                         module.platform.prefixes.compute.ec2.profile
-                                    ) : (
-                                        var.ec2.iam_instance_profile
-                                    )
+                                    ) : var.ec2.iam_instance_profile
 
     tags                            = merge({
         Name                        = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
