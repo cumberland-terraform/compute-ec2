@@ -55,7 +55,8 @@ variable "ec2" {
     }), null)
     private_ip                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
-    userdata                      = optional(string, null)
+    user_data                     = optional(string, null)
+    user_data_replace_on_change   = optional(string, true)
   })
   
   validation {

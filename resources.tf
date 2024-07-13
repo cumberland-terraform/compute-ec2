@@ -73,7 +73,8 @@ resource "aws_instance" "instance" {
     #       between 0 and (n-1), where n is `length(module.platform.subnets.id)`)
     subnet_id                   = module.platform.network.subnets.ids[0]
     tags                        = local.tags
-    user_data                   = local.userdata
+    user_data                   = local.user_data
+    user_data_replace_on_change = var.ec2.user_data_replace_on_change
     vpc_security_group_ids      = local.vpc_security_group_ids
     
     lifecycle {

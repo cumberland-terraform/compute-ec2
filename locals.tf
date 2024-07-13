@@ -51,22 +51,22 @@ locals {
                                         local.baseline_vpc_sg_ids
                                     ) : local.baseline_vpc_sg_ids
 
-    userdata_path                  = local.conditions.is_rhel ? (
+    user_data_path                  = local.conditions.is_rhel ? (
                                         # RHEL `user-data` path and extension
                                         "${path.module}/user-data/rhel/user-data.sh" 
                                     ) : (
                                         # Windows `user-data` path and extension
                                         "${path.module}/user-data/windows/user-data.ps1" 
                                     )
-    userdata_config                = local.conditions.is_rhel ? {
+    user_data_config                = local.conditions.is_rhel ? {
                                         # RHEL `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     } : {
                                         # WINDOWS `user-data` configuration
                                             # TODO: figure out what needs injected, if anything
                                     }
-    userdata                       = local.conditions.use_default_userdata ? (
-                                        templatefile(local.userdata_path, local.userdata_config)
+    user_data                       = local.conditions.use_default_userdata ? (
+                                        templatefile(local.user_data_path, local.user_data_config)
                                     ) : var.ec2.userdata 
 
     os                              = local.conditions.is_windows ? (
