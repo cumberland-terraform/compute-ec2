@@ -15,7 +15,6 @@ variable "platform" {
   })
 }
 
-
 variable "ec2" {
   description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
   type = object({
