@@ -25,7 +25,7 @@ locals {
         is_windows                  = strcontains(var.ec2.operating_system, "Windows")
         is_rhel                     = strcontains(var.ec2.operating_system, "RHEL")
         is_public                   = strcontains(upper(var.platform.subnet_type), "PUB")
-        use_default_userdata        = var.ec2.userdata == null
+        use_default_userdata        = var.ec2.user_data == null
         use_default_iam             = var.ec2.iam_instance_profile == null
     }
 
