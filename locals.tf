@@ -67,7 +67,7 @@ locals {
                                     }
     user_data                       = local.conditions.use_default_userdata ? (
                                         templatefile(local.user_data_path, local.user_data_config)
-                                    ) : var.ec2.userdata 
+                                    ) : var.ec2.user_data 
 
     os                              = local.conditions.is_windows ? (
                                         "Windows" # inconsistent tagging conventions between OSs.
