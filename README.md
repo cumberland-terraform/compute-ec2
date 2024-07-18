@@ -14,16 +14,16 @@ The bare minimum deployment can be achieved with the following configuration,
 provider "tls" { }
 
 provider "aws" {
-	region                  = "us-east-1"
+	region					= "us-east-1"
 
 	assume_role {
-		role_arn            = "arn:aws:iam::<target-account>:role/IMR-MDT-TERA-EC2"
+		role_arn 			= "arn:aws:iam::<target-account>:role/IMR-MDT-TERA-EC2"
 	}
 }
 
 provider "aws" {
-	alias                   = "core"
-	region                  = "us-east-1"
+	alias 					= "core"
+	region 					= "us-east-1"
 }
 ```
 
@@ -31,8 +31,8 @@ provider "aws" {
 
 ```
 module "server" {
-	source          		= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
-	
+	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
+
 	providers				= {
 		aws.core 			= aws.core
 	}
