@@ -8,21 +8,51 @@ This is the baseline module for a standalone **EC2** instance on the **MDThink P
 
 The bare minimum deployment can be achieved with the following configuration,
 
+**providers.tf**
+
+```hcl
+provider "tls" { }
+
+provider "aws" {
+	region					= "us-east-1"
+
+	assume_role {
+		role_arn 			= "arn:aws:iam::<target-account>:role/IMR-MDT-TERA-EC2"
+	}
+}
+
+provider "aws" {
+	alias 					= "core"
+	region 					= "us-east-1"
+}
+```
+
+**modules.tf**
+
 ```
 module "server" {
+<<<<<<< HEAD
 	source          		= "ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-aws-core-compute-ec2.git"
 	
+=======
+	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
+
+	providers				= {
+		aws.core 			= aws.core
+	}
+
+>>>>>>> 52663b8a33d25c6031d98ea06c9247c63916f239
 	platform				= {
-		aws_region          = "<region-name>"
-        account             = "<account-name>"
-        acct_env            = "<account-environment>"
-        agency              = "<agency>"
-        program             = "<program>"
+		aws_region 			= "<region-name>"
+		account 			= "<account-name>"
+		acct_env 			= "<account-environment>"
+		agency 				= "<agency>"
+		program 			= "<program>"
 		app					= "<application>"
-        app_env             = "<application-environment>"
-        domain              = "<active-directory-domain>"
-        pca                 = "<pca-code>"
-		subnet_tye 			= "<subnet-type>"
+		app_env  			= "<application-environment>"
+		domain 				= "<active-directory-domain>"
+		pca 				= "<pca-code>"
+		subnet_type 		= "<subnet-type>"
 		availability_zones	= [ "<availability_zone>"]
 	}
 
