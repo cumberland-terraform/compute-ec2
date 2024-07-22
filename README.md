@@ -31,17 +31,12 @@ provider "aws" {
 
 ```
 module "server" {
-<<<<<<< HEAD
-	source          		= "ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-aws-core-compute-ec2.git"
-	
-=======
 	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
 
 	providers				= {
 		aws.core 			= aws.core
 	}
 
->>>>>>> 52663b8a33d25c6031d98ea06c9247c63916f239
 	platform				= {
 		aws_region 			= "<region-name>"
 		account 			= "<account-name>"
