@@ -23,12 +23,16 @@ locals {
         provision_kms_key           = var.ec2.kms_key == null
         provision_sg                = var.ec2.provision_sg
         is_windows                  = strcontains(var.ec2.operating_system, "Windows")
-        is_rhel                     = strcontains(var.ec2.operating_system, "RHEL")
+        is_rhel7                    = strcontains(var.ec2.operating_system, "RHEL7")
+        is_rhel8                    = strcontains(var.ec2.operating_system, "RHEL8")
         is_public                   = strcontains(upper(var.platform.subnet_type), "PUB")
         use_default_userdata        = var.ec2.user_data == null
         use_default_iam             = var.ec2.iam_instance_profile == null
     }
-
+    # Derived Conditions (Conditions that depend on conditions, oh my!)
+    derived                         = {
+        is_rhel                     = local.conditions.is_rhel7 || local.conditions.is_rhel8 
+    }
     ## CALCULATED PROPERTIES
     #   Variables that change based on deployment configuration. 
     kms_key_id                      = local.conditions.provision_kms_key ? (
@@ -51,19 +55,17 @@ locals {
                                         local.baseline_vpc_sg_ids
                                     ) : local.baseline_vpc_sg_ids
 
-    user_data_path                  = local.conditions.is_rhel ? (
-                                        # RHEL `user-data` path and extension
-                                        "${path.module}/user-data/rhel/user-data.sh" 
-                                    ) : (
-                                        # Windows `user-data` path and extension
-                                        "${path.module}/user-data/windows/user-data.ps1" 
-                                    )
-    user_data_config                = local.conditions.is_rhel ? {
-                                        # RHEL `user-data` configuration
-                                            # TODO: figure out what needs injected, if anything
-                                    } : {
-                                        # WINDOWS `user-data` configuration
-                                            # TODO: figure out what needs injected, if anything
+    user_data_path                  = local.conditions.is_rhel7 ? (
+                                        "${path.module}/user-data/rhel7/user-data.sh" 
+                                    ) : local.conditions.is_rhel8 ? ( 
+                                        "${path.module}/user-data/rhel8/user-data.sh" 
+                                    ) : "${path.module}/user-data/windows/user-data.ps1" 
+    user_data_config                = local.conditions.is_rhel7 ? {
+                                    
+                                    } : local.conditions.is_rhel8 ? {
+
+                                    }: {
+                                        
                                     }
     user_data                       = local.conditions.use_default_userdata ? (
                                         templatefile(local.user_data_path, local.user_data_config)
@@ -94,7 +96,7 @@ locals {
 
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
-    ami_filters                     = local.conditions.is_rhel ? [
+    ami_filters                     = local.derived.is_rhel ? [
         {
             "key"                   = "tag:OS",
             "value"                 = [ var.ec2.operating_system ]
