@@ -1,5 +1,5 @@
 variable "platform" {
-  description                     = "Platform metadata configuration object. See platform module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-platform/browse) for detailed information about the permitted values for each field."
+  description                     = "Platform metadata configuration object. See platform module (https://source.mdthink.maryland.gov/projects/etm/repos/mdt-eter-platform/browse) for detailed information about the permitted values for each field."
   type                            = object({
     aws_region                    = string 
     account                       = string
@@ -16,7 +16,7 @@ variable "platform" {
 }
 
 variable "ec2" {
-  description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
+  description                     = "Configuration for the host environment. See EC2 module (https://source.mdthink.maryland.gov/projects/etm/repos/mdt-eter-core-compute-ec2/browse) for detailed information about the permitted values for each field."
   type = object({
     operating_system              = string
     tags                          = object({

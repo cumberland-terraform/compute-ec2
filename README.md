@@ -14,10 +14,11 @@ The bare minimum deployment can be achieved with the following configuration,
 provider "tls" { }
 
 provider "aws" {
+	alias 					= "tenant"
 	region					= "us-east-1"
 
 	assume_role {
-		role_arn 			= "arn:aws:iam::<target-account>:role/IMR-MDT-TERA-EC2"
+		role_arn 			= "arn:aws:iam::<tenant-account>:role/IMR-MDT-TERA-EC2"
 	}
 }
 
@@ -31,9 +32,10 @@ provider "aws" {
 
 ```
 module "server" {
-	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git"
+	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git?ref=v1.0.0"
 
 	providers				= {
+		aws 				= aws.tenant
 		aws.core 			= aws.core
 	}
 
@@ -63,20 +65,20 @@ module "server" {
 }
 ```
 
-`platform` is a parameter for *all* **MDThink Enterprise Terraform** modules. For more information about the `platform`, in particular the permitted values of the nested fields, see the [mdt-eter-platform documentation](https://source.mdthink.maryland.gov/projects/ET/repos/mdt-eter-platform/browse). The following section goes into more detail regarding the `ec2` variable.
+`platform` is a parameter for *all* **MDThink Enterprise Terraform** modules. For more information about the `platform`, in particular the permitted values of the nested fields, see the [mdt-eter-platform documentation](https://source.mdthink.maryland.gov/projects/etm/repos/mdt-eter-platform/browse). The following section goes into more detail regarding the `ec2` variable.
 
 ### Parameters
 
-The `ec2` object represents the configuration for a new deployment. Only three fields are absolutely required: `operating_system`, `availability_zone` and `tags`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object fields and their purpose,
+The `ec2` object represents the configuration for a new deployment. Only two fields are absolutely required: `operating_system` and `tags`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object fields and their purpose,
 
-- `operating_system`: (*Required*) Operating system for the instance. Currently supported values are: `RHEL7`, `RHEL8`, `Windows2012R2`, `Windows2016`, `Windows2019`, `Windows2022`
+- `operating_system`: (*Required*) Operating system for the instance. Currently supported values are: `RHEL7`, `RHEL8`, `Windows2012R2`, `Windows2016`, `Windows2019`, `Windows2022`.
 - `tags`: (*Required*) Tag configuration object.
 	- `builder`: (*Required*) Person or process responsible for provisioning.
 	- `primary_contact`: (*Required*) Contact information for the owner of the instance.
 	- `owner`: (*Required*) Name of the owner.
 	- `purpose`: (*Required*) Description of the server. 
-	- `rhel_repo`: (*Optional*) Defaults to *NA*
-	- `schedule`: (*Optional*) Defaults to *never*.
+	- `rhel_repo`: (*Optional*) Defaults to `NA`
+	- `schedule`: (*Optional*) Defaults to `never`.
 	- `new_build`: (*Optional*). Boolean flagging instance as new. Defaults to `true`.
 	- `auto_backup`: (*Optional*): Boolean flagging instance for automated backup. Defaults to `false`.
 - `additional_security_group_ids`: (*Optional*) A list of IDs for the security groups into which the new instance will be deployed. *NOTE*: The instance will be deployed into platform security groups (such as *DMEM* and *RHEL*) automatically, so this list should only contain application specific security groups.
