@@ -21,18 +21,21 @@ variables {
         availability_zones                  = [ "C01" ]
     }
     ec2                                     = {
-        kms_key                             = {
-            id                              = "b48b3d55-8104-48aa-a17b-425384fe4657"
-        }
+        instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
+        ssh_key_name                        = "MDTCoreUSEast1Virginia"
+        kms_key_id                          = "b48b3d55-8104-48aa-a17b-425384fe4657"
         operating_system                    = "RHEL7"
         tags                                = {
+            application                     = "Mock Application"
             purpose                         = "Mock Purpose"
             builder                         = "Mock Builder"
             primary_contact                 = "Mock Primary Contact"
             owner                           = "Mock Owner"
         }
     }
-}
+} 
+
+
 
   
 run "validate_ec2_ami"{
@@ -49,8 +52,12 @@ run "validate_ec2_ami"{
         error_message = "Expected vpc_id did not generate from provided parameters . Expected: vpc-095012aae01b8551a"
     }
     assert {
-        condition = aws_security_group_rule.remote_access_ingress.security_group_id == "sg-0b21fc66d0bea5c6b", "sg-0575308497bc077b2"
-        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b, sg-0575308497bc077b2"
+        condition = aws_security_group_rule.remote_access_ingress.security_group_id == "sg-0b21fc66d0bea5c6b" 
+        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b
+    }
+    assert {
+        condition = aws_security_group_rule.remote_access_ingress.security_group_id ==  "sg-0575308497bc077b2"
+        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2
     }
     assert {
         condition = aws_instance.instance.subnet_id  == "subnet-0fa5dcb643e244825"
