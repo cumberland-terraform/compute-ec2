@@ -53,11 +53,11 @@ run "validate_ec2_ami"{
     }
     assert {
         condition = aws_security_group_rule.remote_access_ingress.security_group_id == "sg-0b21fc66d0bea5c6b" 
-        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b
+        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
     }
     assert {
         condition = aws_security_group_rule.remote_access_ingress.security_group_id ==  "sg-0575308497bc077b2"
-        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2
+        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2"
     }
     assert {
         condition = aws_instance.instance.subnet_id  == "subnet-0fa5dcb643e244825"
