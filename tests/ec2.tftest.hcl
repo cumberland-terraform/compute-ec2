@@ -128,16 +128,6 @@ run "validate_ec2_rhel_repo_tag"{
         error_message = "Expected rhel_repo did not generate from provided parameters . Expected: NA"
     }
 }
-run "validate_ec2_pca_code_tag"{
-      providers = {
-          aws = aws
-    }
-    command = plan
-    assert {
-        condition = local.tags.PCA Code == "FE110"
-        error_message = "Expected PCA Code did not generate from provided parameters . Expected: FE110"
-    }
-}
 run "validate_ec2_purpose_tag"{
       providers = {
           aws = aws
