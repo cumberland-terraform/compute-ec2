@@ -188,7 +188,7 @@ run "validate_ec2_instance_key_name_tag"{
         error_message = "Expected name did not generate from provided parameters . Expected: siegterad1e1c01 "
     }
 }
-run "validate_ec2_instance_key_name_tag"{
+run "validate_ec2_instance_OS_tag"{
       providers = {
           aws = aws
     }
