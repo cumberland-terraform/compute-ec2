@@ -35,15 +35,6 @@ run "validate_tag" {
             }
           }
 
-    vpc_config                          = {
-        availability_zone                   = "C"
-        id                                  = "vpc-095012aae01b8551a"
-        subnet_id                           = "N/A"
-        security_group_ids                  = [
-          "N/A"
-          ]
-    }
-
     platform                            = {
         core_aws_id                         = "545019462778"
         tenant_aws_id                       = "798223307841"
