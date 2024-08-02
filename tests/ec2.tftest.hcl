@@ -5,6 +5,14 @@ provider "aws" {
     }
 }
 
+provider "aws" {
+  # NOTE: when this is running through Jenkins, it automatically uses 
+  #       the `jenkins-slave` IAM user from the Core account. Hence,
+  #       the absence of an assume_role block.
+  alias                     = "core"
+  region                    = "us-east-1"
+}
+
 variables {
     platform                                = {
         aws_region                          = "US EAST 1"
