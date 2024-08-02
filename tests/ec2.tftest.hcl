@@ -46,8 +46,6 @@ variables {
 run "validate_ec2_ami"{
      providers = {
         aws = aws
-    }
-    providers = {
         aws.core = aws.core
     }
     command = plan
@@ -59,9 +57,7 @@ run "validate_ec2_ami"{
 
  run "validate_ec2_vpc"{
       providers = {
-          aws = aws
-    }
-    providers = {
+ 		aws = aws
         aws.core = aws.core
     }
     command = plan   
@@ -74,9 +70,7 @@ run "validate_ec2_ami"{
  run "validate_ec2_sg1"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+       	  aws.core = aws.core
     }
     command = plan      
     assert {
@@ -88,9 +82,7 @@ run "validate_ec2_ami"{
 run "validate_ec2_sg2"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan    
     assert {
@@ -102,9 +94,7 @@ run "validate_ec2_sg2"{
 run "validate_ec2_subnet"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan       
     assert {
@@ -116,9 +106,7 @@ run "validate_ec2_subnet"{
 run "validate_ec2_iam_instance_profile"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan     
     assert {
@@ -130,9 +118,7 @@ run "validate_ec2_iam_instance_profile"{
 run "validate_ec2_schedule_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan  
     assert {
@@ -144,9 +130,7 @@ run "validate_ec2_schedule_tag"{
 run "validate_ec2_owner_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan     
     assert {
@@ -158,9 +142,7 @@ run "validate_ec2_owner_tag"{
 run "validate_ec2_rhel_repo_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan
     assert {
@@ -172,9 +154,7 @@ run "validate_ec2_rhel_repo_tag"{
 run "validate_ec2_purpose_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan
     assert {
@@ -186,9 +166,7 @@ run "validate_ec2_purpose_tag"{
 run "validate_ec2_builder_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan
     assert {
@@ -200,9 +178,7 @@ run "validate_ec2_builder_tag"{
 run "validate_ec2_autobackup_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan
     assert {
@@ -214,9 +190,7 @@ run "validate_ec2_autobackup_tag"{
 run "validate_ec2_primary_contact_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan
     assert {
@@ -228,9 +202,7 @@ run "validate_ec2_primary_contact_tag"{
 run "validate_ec2_instance_key_name_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     command = plan  
     assert {
@@ -242,9 +214,7 @@ run "validate_ec2_instance_key_name_tag"{
 run "validate_ec2_instance_OS_tag"{
       providers = {
           aws = aws
-    }
-    providers = {
-        aws.core = aws.core
+          aws.core = aws.core
     }
     assert {
         condition = local.tags.OS   == "RHEL7"
