@@ -47,15 +47,22 @@ run "validate_ec2_ami"{
      providers = {
         aws = aws
     }
+    providers = {
+        aws.core = aws.core
+    }
     command = plan
     assert {
         condition = aws_instance.instance.ami == "ami-08595d2c8a7d499c4"
         error_message = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
     }
 }
+
  run "validate_ec2_vpc"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan   
     assert {
@@ -63,9 +70,13 @@ run "validate_ec2_ami"{
         error_message = "Expected vpc_id did not generate from provided parameters . Expected: vpc-095012aae01b8551a"
     }
 }
+
  run "validate_ec2_sg1"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan      
     assert {
@@ -73,9 +84,13 @@ run "validate_ec2_ami"{
         error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
     }
 }
+
 run "validate_ec2_sg2"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan    
     assert {
@@ -83,9 +98,13 @@ run "validate_ec2_sg2"{
         error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2"
     }
 }
+
 run "validate_ec2_subnet"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan       
     assert {
@@ -93,9 +112,13 @@ run "validate_ec2_subnet"{
         error_message = "Expected subnet_id did not generate from provided parameters . Expected: subnet-0fa5dcb643e244825"
     }
 }
+
 run "validate_ec2_iam_instance_profile"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan     
     assert {
@@ -103,9 +126,13 @@ run "validate_ec2_iam_instance_profile"{
         error_message = "Expected iam_instance_profile did not generate from provided parameters . Expected: IMR-IEG-NEWBUILD-ROLE"
     }
 }
+
 run "validate_ec2_schedule_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan  
     assert {
@@ -113,9 +140,13 @@ run "validate_ec2_schedule_tag"{
         error_message = "Expected schedule did not generate from provided parameters . Expected: never"
     }
 }
+
 run "validate_ec2_owner_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan     
     assert {
@@ -123,9 +154,13 @@ run "validate_ec2_owner_tag"{
         error_message = "Expected owner did not generate from provided parameters . Expected: AWS Devops Team"
     }
 }
+
 run "validate_ec2_rhel_repo_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan
     assert {
@@ -133,9 +168,13 @@ run "validate_ec2_rhel_repo_tag"{
         error_message = "Expected rhel_repo did not generate from provided parameters . Expected: NA"
     }
 }
+
 run "validate_ec2_purpose_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan
     assert {
@@ -143,9 +182,13 @@ run "validate_ec2_purpose_tag"{
         error_message = "Expected  purpose  did not generate from provided parameters . Expected: Mock Purpose"
     }
 }
+
 run "validate_ec2_builder_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan
     assert {
@@ -153,9 +196,13 @@ run "validate_ec2_builder_tag"{
         error_message = "Expected Builder did not generate from provided parameters . Expected: Mock Builder"
     }
 }
+
 run "validate_ec2_autobackup_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan
     assert {
@@ -163,9 +210,13 @@ run "validate_ec2_autobackup_tag"{
         error_message = "Expected AutoBackup  did not generate from provided parameters . Expected:  false"
     }
 }
+
 run "validate_ec2_primary_contact_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan
     assert {
@@ -173,9 +224,13 @@ run "validate_ec2_primary_contact_tag"{
         error_message = "Expected  primary_contact did not generate from provided parameters . Expected: Mock Primary Owner "
     }
 }
+
 run "validate_ec2_instance_key_name_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     command = plan  
     assert {
@@ -183,9 +238,13 @@ run "validate_ec2_instance_key_name_tag"{
         error_message = "Expected name did not generate from provided parameters . Expected: siegterad1e1c01 "
     }
 }
+
 run "validate_ec2_instance_OS_tag"{
       providers = {
           aws = aws
+    }
+    providers = {
+        aws.core = aws.core
     }
     assert {
         condition = local.tags.OS   == "RHEL7"
