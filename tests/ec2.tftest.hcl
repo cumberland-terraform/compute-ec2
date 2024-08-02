@@ -5,6 +5,11 @@ provider "aws" {
     }
 }
 
+provider "aws" {
+    alias                                   = "core"
+    region                                  = "us-east-1"
+}
+
 variables {
     platform                                = {
         aws_region                          = "US EAST 1"
