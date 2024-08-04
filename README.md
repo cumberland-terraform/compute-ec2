@@ -32,7 +32,7 @@ provider "aws" {
 
 ```
 module "server" {
-	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git?ref=v1.0.0"
+	source 					= "ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-aws-core-compute-ec2.git?ref=v1.0.0"
 
 	providers				= {
 		aws 				= aws.tenant
