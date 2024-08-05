@@ -32,7 +32,7 @@ provider "aws" {
 
 ```
 module "server" {
-	source 					= "ssh://git@source.mdthink.maryland.gov:22/et/mdt-eter-aws-core-compute-ec2.git?ref=v1.0.0"
+	source 					= "ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-aws-core-compute-ec2.git?ref=v1.0.0"
 
 	providers				= {
 		aws 				= aws.tenant
@@ -130,8 +130,7 @@ Once the commit has been tagged, a PR can be made from the `test` branch into th
 Ensure each item on the following checklist is complete before updating any tenant deployments with a new version of the ``mdt-eter-core-compute-eks`` module,
 
 - [] Update Changelog
-- [] Open PR into `test` branch
-- [] Ensure tests are passing in Jenkins
+- [] Ensure `test` branch is passing in Jenkins
 - [] Increment `git tag` version
 - [] Merge PR into `test`
 - [] Open PR from `test` into `master` branch

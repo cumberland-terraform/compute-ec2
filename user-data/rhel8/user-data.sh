@@ -8,4 +8,4 @@ chmod 755 /root/Preamble.sh
 
 . /root/.env
 
-/root/git/MDT_BASE/mdt-base_user-data_RH8.sh FIPS
+/root/git/MDT_BASE/mdt-base_user-data-git_RH8.sh FIPS
