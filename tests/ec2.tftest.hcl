@@ -58,17 +58,7 @@ provider "aws" {
         subnet_type                         = "PUBLIC"
         availability_zones                  = [ "C01" ]
     }
-        instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
-        ssh_key_name                        = "MDTCoreUSEast1Virginia"
-        kms_key_id                          = "b48b3d55-8104-48aa-a17b-425384fe4657"
-        operating_system                    = "RHEL7"
-        tags                                = {
-            application                     = "Mock Application"
-            purpose                         = "Mock Purpose"
-            builder                         = "Mock Builder"
-            primary_contact                 = "Mock Primary Contact"
-            owner                           = "Mock Owner"
-        }
+
 } 
 
 run "validate_ec2_ami"{
