@@ -30,5 +30,5 @@ module "ec2" {
     source          	                    = "git::ssh://mdt.global@source.mdthink.maryland.gov:22/etm/mdt-eter-core-compute-ec2.git"
 
     ec2                                     = local.ec2
-    platform                                = local.platform
+    platform                                = var.platform
 }
