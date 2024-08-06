@@ -22,7 +22,7 @@ provider "aws" {
         tags                                = {
             application                     = "Terraform Enterprise"
             builder                         = "Grant Moore - 2024-06-25"
-            contact                         = "grant.moore@maryland.gov"
+            primary_contact                 = "grant.moore@maryland.gov"
             auto_backup                     = false
             domain                          = "MDT.ENG"
             owner                           = "AWS DevOps Team"
@@ -47,11 +47,11 @@ provider "aws" {
         tenant_aws_id                       = "798223307841"
         aws_region                          = "US EAST 1"
         account                             = "ID ENGINEERING"
-        acct_env                            = "DEVELOPMENT 1"
+        acct_env                            = "NON-PRODUCTION 1"
         agency                              = "MARYLAND TOTAL HUMAN-SERVICES INTEGRATED NETWORK"
         program                             = "MDTHINK SHARED PLATFORM"
         app                                 = "TERRAFORM ENTERPRISE"
-        app_env                             = "PROOF OF CONCEPT"
+        app_env                             = "NON PRODUCTION"
         domain                              = "ENGINEERING"
         pca                                 = "FE110"
         owner                               = "MDT DevOps"
