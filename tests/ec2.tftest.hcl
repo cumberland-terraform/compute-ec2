@@ -80,7 +80,7 @@ run "validate_ec2_ami"{
     }
     command = plan   
     assert {
-        condition = aws_security_group.remote_access_sg.vpc_id == "vpc-095012aae01b8551a"
+        condition = module.platform.network.vpc.id == "vpc-095012aae01b8551a"
         error_message = "Expected vpc_id did not generate from provided parameters . Expected: vpc-095012aae01b8551a"
     }
 }
