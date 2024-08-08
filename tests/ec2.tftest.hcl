@@ -92,9 +92,8 @@ run "validate_ec2_ami"{
     }
     command = plan      
     assert {
-        condition = aws_security_group.remote_access_sg[count.index].id == "sg-0b21fc66d0bea5c6b" \n
-        condition = aws_security_group.remote_access_sg[count.index].id == "sg-0575308497bc077b2"
-        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b, sg-0575308497bc077b2"
+        condition = aws_security_group.remote_access_sg[count.index].id == "sg-0b21fc66d0bea5c6b"
+        error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
     }
 }
 
