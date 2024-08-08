@@ -68,7 +68,7 @@ run "validate_ec2_ami"{
     }
     command = plan
     assert {
-        condition = aws_instance.instance.ami == "ami-08595d2c8a7d499c4"
+        condition = data.aws_ami.latest.id == "ami-08595d2c8a7d499c4"
         error_message = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
     }
 }
@@ -85,26 +85,26 @@ run "validate_ec2_ami"{
     }
 }
 
- run "validate_ec2_sg1"{
+ run "validate_ec2_sg"{
       providers = {
           aws = aws
        	  aws.core = aws.core
     }
     command = plan      
     assert {
-        condition = aws_security_group_rule.remote_access_ingress.security_group_id == "sg-0b21fc66d0bea5c6b" 
+        condition = aws_security_group.remote_access_sg[count.index].id == "sg-0b21fc66d0bea5c6b" 
         error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
     }
 }
 
-run "validate_ec2_sg2"{
+run "validate_ec2_sg"{
       providers = {
           aws = aws
           aws.core = aws.core
     }
     command = plan    
     assert {
-        condition = aws_security_group_rule.remote_access_ingress.security_group_id ==  "sg-0575308497bc077b2"
+        condition = aws_security_group.remote_access_sg[count.index].id ==  "sg-0575308497bc077b2"
         error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2"
     }
 }
@@ -116,7 +116,7 @@ run "validate_ec2_subnet"{
     }
     command = plan       
     assert {
-        condition = aws_instance.instance.subnet_id  == "subnet-0fa5dcb643e244825"
+        condition =  module.platform.network.subnets.ids[0]  == "subnet-0fa5dcb643e244825"
         error_message = "Expected subnet_id did not generate from provided parameters . Expected: subnet-0fa5dcb643e244825"
     }
 }
@@ -128,7 +128,7 @@ run "validate_ec2_iam_instance_profile"{
     }
     command = plan     
     assert {
-        condition = aws_instance.instance.iam_instance_profile  == "IMR-IEG-NEWBUILD-ROLE"
+        condition = local.iam_instance_profile == "IMR-IEG-NEWBUILD-ROLE"
         error_message = "Expected iam_instance_profile did not generate from provided parameters . Expected: IMR-IEG-NEWBUILD-ROLE"
     }
 }
@@ -224,7 +224,7 @@ run "validate_ec2_instance_key_name_tag"{
     }
     command = plan  
     assert {
-        condition = aws_instance.instance.key_name  == "siegterad1e1c01"
+        condition = module.platform.prefixes.security.pem_key  == "siegterad1e1c01"
         error_message = "Expected name did not generate from provided parameters . Expected: siegterad1e1c01 "
     }
 }
