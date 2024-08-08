@@ -110,7 +110,7 @@ run "validate_ec2_subnet"{
     }
     command = plan       
     assert {
-        condition =  module.platform.network.subnets.ids  == "subnet-0fa5dcb643e244825"
+        condition =  module.platform.network.subnets.ids[0]  == "subnet-0fa5dcb643e244825"
         error_message = "Expected subnet_id did not generate from provided parameters . Expected: subnet-0fa5dcb643e244825"
     }
 }
