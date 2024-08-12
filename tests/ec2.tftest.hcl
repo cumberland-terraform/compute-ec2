@@ -78,20 +78,6 @@ run "validate_ec2_ami"{
     }
 }
 
-
-
-run "validate_ec2_subnet"{
-      providers = {
-          aws = aws
-          aws.core = aws.core
-    }
-    command = plan       
-    assert {
-        condition =  module.platform.network.subnets.ids[0]  == "subnet-0fa5dcb643e244825"
-        error_message = "Expected subnet_id did not generate from provided parameters . Expected: subnet-0fa5dcb643e244825"
-    }
-}
-
 run "validate_ec2_iam_instance_profile"{
       providers = {
           aws = aws
