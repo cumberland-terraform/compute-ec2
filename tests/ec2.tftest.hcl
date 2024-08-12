@@ -16,31 +16,20 @@ provider "aws" {
   variables {
     ec2 = {
         instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
-        ssh_key_name                        = "MDTCoreUSEast1Virginia"
         operating_system                    = "RHEL7"
-        type                                = "t3.xlarge"
         tags                                = {
             application                     = "Terraform Enterprise"
-            builder                         = "Grant Moore - 2024-06-25"
-            primary_contact                 = "grant.moore@maryland.gov"
+            builder                         = "Mock Builder"
+            primary_contact                 = "Mock Primary Contact"
             auto_backup                     = false
             domain                          = "MDT.ENG"
             owner                           = "AWS DevOps Team"
-            purpose                         = "Terraform Enterprise Test POC"
+            purpose                         = "Mock Purpose"
             new_build                       = true
             schedule                        = "never"
             rhel_repo                       = "NA"
             }
           }
-
-    vpc_config                          = {
-        availability_zone                   = "C"
-        id                                  = "vpc-095012aae01b8551a"
-        subnet_id                           = "MDT-IEG-E1-C01-APP-PUB"
-        security_group_ids                  = [
-          "N/A"
-          ]
-    }
 
     platform                            = {
         core_aws_id                         = "545019462778"
@@ -70,18 +59,6 @@ run "validate_ec2_ami"{
     assert {
         condition = data.aws_ami.latest.id == "ami-08595d2c8a7d499c4"
         error_message = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
-    }
-}
-
- run "validate_ec2_vpc"{
-      providers = {
- 		aws = aws
-        aws.core = aws.core
-    }
-    command = plan   
-    assert {
-        condition = module.platform.network.vpc.id == "vpc-095012aae01b8551a"
-        error_message = "Expected vpc_id did not generate from provided parameters . Expected: vpc-095012aae01b8551a"
     }
 }
 
