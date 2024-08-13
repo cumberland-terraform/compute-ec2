@@ -1,39 +1,27 @@
 provider "aws" {
-    region           = "us-east-1"
+    region                                  = "us-east-1"
     assume_role{
-        role_arn     = "arn:aws:iam::798223307841:role/IMR-MDT-TERA-EC2"
+        role_arn                            = "arn:aws:iam::798223307841:role/IMR-MDT-TERA-EC2"
     }
 }
 
 provider "aws" {
-  # NOTE: when this is running through Jenkins, it automatically uses 
-  #       the `jenkins-slave` IAM user from the Core account. Hence,
-  #       the absence of an assume_role block.
-  alias                     = "core"
-  region                    = "us-east-1"
+  alias                                     = "core"
+  region                                    = "us-east-1"
 }
 
   variables {
-    ec2 = {
-        instance_profile                    = "IMR-IEG-NEWBUILD-ROLE"
+    ec2                                     = {
         operating_system                    = "RHEL7"
         tags                                = {
-            application                     = "Terraform Enterprise"
             builder                         = "Mock Builder"
             primary_contact                 = "Mock Primary Contact"
-            auto_backup                     = false
-            domain                          = "MDT.ENG"
             owner                           = "AWS DevOps Team"
             purpose                         = "Mock Purpose"
-            new_build                       = true
-            schedule                        = "never"
-            rhel_repo                       = "NA"
             }
           }
 
-    platform                            = {
-        core_aws_id                         = "545019462778"
-        tenant_aws_id                       = "798223307841"
+    platform                                = {
         aws_region                          = "US EAST 1"
         account                             = "ID ENGINEERING"
         acct_env                            = "NON-PRODUCTION 1"
@@ -43,7 +31,6 @@ provider "aws" {
         app_env                             = "NON PRODUCTION"
         domain                              = "ENGINEERING"
         pca                                 = "FE110"
-        owner                               = "MDT DevOps"
         subnet_type                         = "PUBLIC"
         availability_zones                  = [ "C01" ]
     }
@@ -51,78 +38,78 @@ provider "aws" {
 } 
 
 run "validate_ec2_ami"{
-     providers = {
-        aws = aws
-        aws.core = aws.core
+    providers                               = {
+        aws                                 = aws
+        aws.core                            = aws.core
     }
-    command = plan
+    command                                 = plan
     assert {
-        condition = data.aws_ami.latest.id == "ami-08595d2c8a7d499c4"
-        error_message = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
+        condition                           = data.aws_ami.latest.id == "ami-08595d2c8a7d499c4"
+        error_message                       = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
     }
 }
 
  run "validate_ec2_sg"{
-      providers = {
-          aws = aws
-       	  aws.core = aws.core
+    providers                               = {
+          aws                               = aws
+       	  aws.core                          = aws.core
     }
-    command = plan      
+    command                                 = plan      
     assert {
-        condition = module.platform.network.security_groups.rhel == "sg-0b21fc66d0bea5c6b"
-       error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
+        condition                           = module.platform.network.security_groups.rhel == "sg-0b21fc66d0bea5c6b"
+        error_message                       = "Expected security_group_id did not generate from provided parameters . Expected: sg-0b21fc66d0bea5c6b"
     }
    assert {
-        condition = module.platform.network.security_groups.rhel == "sg-0575308497bc077b2"
-       error_message = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2"
+        condition                           = module.platform.network.security_groups.rhel == "sg-0575308497bc077b2"
+        error_message                       = "Expected security_group_id did not generate from provided parameters . Expected: sg-0575308497bc077b2"
     }
 }
 
 run "validate_ec2_iam_instance_profile"{
-      providers = {
-          aws = aws
-          aws.core = aws.core
+    providers                               = {
+          aws                               = aws
+          aws.core                          = aws.core
     }
-    command = plan     
+    command                                 = plan     
     assert {
-        condition = local.iam_instance_profile == "IMR-IEG-NEWBUILD-ROLE"
-        error_message = "Expected iam_instance_profile did not generate from provided parameters . Expected: IMR-IEG-NEWBUILD-ROLE"
+        condition                           = local.iam_instance_profile == "IMR-IEG-NEWBUILD-ROLE"
+        error_message                       = "Expected iam_instance_profile did not generate from provided parameters . Expected: IMR-IEG-NEWBUILD-ROLE"
     }
 }
 
 run "validate_ec2_schedule_tag"{
-      providers = {
-          aws = aws
-          aws.core = aws.core
+      providers                             = {
+          aws                               = aws
+          aws.core                          = aws.core
     }
-    command = plan  
+    command                                 = plan  
     assert {
-        condition = local.tags.schedule == "never"
-        error_message = "Expected schedule did not generate from provided parameters . Expected: never"
+        condition                           = local.tags.schedule == "never"
+        error_message                       = "Expected schedule did not generate from provided parameters . Expected: never"
     }
 }
 
 run "validate_ec2_owner_tag"{
-      providers = {
-          aws = aws
-          aws.core = aws.core
+      providers                             = {
+          aws                               = aws
+          aws.core                          = aws.core
     }
-    command = plan     
+    command                                 = plan     
     assert {
-        condition = local.tags.owner == "AWS Devops Team"
-        error_message = "Expected owner did not generate from provided parameters . Expected: AWS Devops Team"
+        condition                           = local.tags.owner == "AWS Devops Team"
+        error_message                       = "Expected owner did not generate from provided parameters . Expected: AWS Devops Team"
     }
 }
 
 run "validate_ec2_rhel_repo_tag"{
-      providers = {
-          aws = aws
-          aws.core = aws.core
+      providers                             = {
+          aws                               = aws
+          aws.core                          = aws.core
     }
-    command = plan
+    command                                 = plan
     assert {
-        condition = local.tags.rhel_repo == "NA"
-        error_message = "Expected rhel_repo did not generate from provided parameters . Expected: NA"
+        condition                           = local.tags.rhel_repo == "NA"
+        error_message                       = "Expected rhel_repo did not generate from provided parameters . Expected: NA"
     }
 }
 
