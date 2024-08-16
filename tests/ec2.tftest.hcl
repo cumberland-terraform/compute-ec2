@@ -182,4 +182,16 @@ run "validate_ec2_instance_OS_tag"{
         condition = local.tags.OS   == "RHEL7"
         error_message = "Expected OS  did not generate from provided parameters . Expected: RHEL7 "
     }
-}                                              
+}
+
+run "validate_ec2_ami"{
+    providers                               = {
+        aws                                 = aws
+        aws.core                            = aws.core
+    }
+    command                                 = plan
+    assert {
+        condition                           = data.aws_ami.latest.id == "ami-08595d2c8a7d499c4"
+        error_message                       = "Expected ami ID did not generate from provided parameters . Expected: ami-08595d2c8a7d499c4"
+    }
+}
