@@ -1,6 +1,8 @@
 #!/bin/bash
 
-curl -s https://ec2build.mdthink.maryland.gov/mdt-repo-udbuilds-scripts/MDT_BASE/Preamble_RH8.sh -o /root/Preamble.sh
+curl \
+    -s https://ec2build.mdthink.maryland.gov/mdt-repo-udbuilds-scripts/MDT_BASE/Preamble_RH8.sh \
+    -o /root/Preamble.sh
 
 chmod 755 /root/Preamble.sh
 
