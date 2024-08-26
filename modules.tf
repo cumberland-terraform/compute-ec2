@@ -1,5 +1,5 @@
 module "platform" {
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.7&depth=1"
+  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.10&depth=1"
   
   platform              = var.platform
 }
