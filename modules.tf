@@ -2,6 +2,12 @@ module "platform" {
   source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.10&depth=1"
   
   platform              = var.platform
+  hydration             = {
+    vpc_query           = true
+    subnets_query       = true
+    dmem_sg_query       = true
+    rhel_sg_query       = true
+  }
 }
 
 module "kms" {
