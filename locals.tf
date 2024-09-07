@@ -80,7 +80,10 @@ locals {
                                     ) : var.ec2.iam_instance_profile
 
     tags                            = merge({
-        Name                        = "${module.platform.prefixes.compute.ec2.hostname}${var.ec2.suffix}"
+        Name                        = join("", [
+                                        module.platform.prefixes.compute.ec2.hostname, 
+                                        var.ec2.suffix
+                                    ])
         Builder                     = var.ec2.tags.builder
         Owner                       = var.ec2.tags.owner
         Purpose                     = var.ec2.tags.purpose
@@ -92,7 +95,6 @@ locals {
         OS                          = local.os
     }, module.platform.tags)
 
-    # TODO: calculate default instance profile if null is passed in!
 
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
@@ -105,7 +107,9 @@ locals {
             "key"                   = "tag:Application"
             "value"                 =  [ "Base AMI" ] 
         }
-    ] : [ # It would be nice if Windows and RHEL had consistent tags for identifying the baseline iamge.
+    ] : [ 
+        # It would be nice if Windows and RHEL had consistent tags for 
+        #   identifying the baseline image...
         {
             "key"                   = "tag:OS",
             "value"                 = [ var.ec2.operating_system ]
