@@ -21,7 +21,7 @@ resource "local_file" "tf-key" {
     filename                    = "${path.root}/keys/${module.platform.prefixes.security.pem_key}"
 }
 
-
+# TODO: should be using security group module
 resource "aws_security_group" "remote_access_sg" {
     count                       = local.conditions.provision_sg ? 1 : 0
 
@@ -31,7 +31,7 @@ resource "aws_security_group" "remote_access_sg" {
     tags                        = local.tags
 }
 
-
+# TODO: should be using security group module
 resource "aws_security_group_rule" "remote_access_ingress" {
     count                       = local.conditions.provision_sg ? 1 : 0
 
@@ -44,7 +44,7 @@ resource "aws_security_group_rule" "remote_access_ingress" {
     security_group_id           = aws_security_group.remote_access_sg[count.index].id
 } 
 
-
+# TODO: should be using security group module
 resource "aws_security_group_rule" "remote_access_egress" {
     count                       = local.conditions.provision_sg ? 1 : 0
 
@@ -78,9 +78,11 @@ resource "aws_instance" "instance" {
     vpc_security_group_ids      = local.vpc_security_group_ids
     
     lifecycle {
-        # TF is interpretting the tag calculations as a modification everytime 
+        # NOTE: TF is interpretting the tag calculations as a modification everytime 
         #   a plan is run, so ignore until issue is resuled.
-        ignore_changes          = [ tags ]
+        # NOTE: We change the role as part of the build process, so we have to ignore
+        #       changes to the instance profile!
+        ignore_changes          = [ tags, iam_instance_profile ]
     }
     ## ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
     ##   bootstrap hydrates from metadata server!
