@@ -1,12 +1,12 @@
 module "platform" {
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.12&depth=1"
+  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.15"
   
   platform              = var.platform
 }
 
 module "kms" {
   count                 = local.conditions.provision_kms_key ? 1 : 0
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-core-security-kms.git?ref=v1.0.2&depth=1"
+  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-core-security-kms.git?ref=v1.0.2"
 
   kms                   = {
       alias_suffix      = "EC2"
