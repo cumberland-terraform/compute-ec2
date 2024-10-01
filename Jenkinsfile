@@ -6,7 +6,7 @@ pipeline {
 	environment { 
 		BITBUCKET_KEY 				= credentials('mdtjenkinsbgit')
 		EMAIL_LIST 					= 'grant.moore@maryland.gov,aaron.ramirez@maryland.gov,aasritha.kilari@maryland.gov,'
-		MODULE_NAME 				= 'asg'
+		MODULE_NAME 				= 'ec2'
 		OS_ARCH 					= 'amd64' 
 		TF_LOG 						= 'WARN'
 		TF_VER 						= '1.8.5'
