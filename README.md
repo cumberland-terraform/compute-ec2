@@ -11,14 +11,12 @@ The bare minimum deployment can be achieved with the following configuration,
 **providers.tf**
 
 ```hcl
-provider "tls" { }
-
 provider "aws" {
 	alias 					= "tenant"
 	region					= "us-east-1"
 
 	assume_role {
-		role_arn 			= "arn:aws:iam::<tenant-account>:role/IMR-MDT-TERA-EC2"
+		role_arn 			= "arn:aws:iam::<tenant-account>:role/<role-name>"
 	}
 }
 ```
