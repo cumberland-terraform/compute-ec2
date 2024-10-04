@@ -21,11 +21,6 @@ provider "aws" {
 		role_arn 			= "arn:aws:iam::<tenant-account>:role/IMR-MDT-TERA-EC2"
 	}
 }
-
-provider "aws" {
-	alias 					= "core"
-	region 					= "us-east-1"
-}
 ```
 
 **modules.tf**
@@ -113,7 +108,7 @@ git checkout master
 git pull
 ```
 
-### Step 2 Create Branch
+### Step 2: Create Branch
 
 Create a branch from the `master` branch. The branch name should be formatted as follows:
 
