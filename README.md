@@ -110,7 +110,7 @@ git pull
 
 Create a branch from the `master` branch. The branch name should be formatted as follows:
 
-        feature/<TICKET_NUMBER>
+	feature/<TICKET_NUMBER>
 
 Where the value of `<TICKET_NUMBER>` is the ticket for which your work is associated. 
 
