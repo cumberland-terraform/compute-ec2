@@ -90,8 +90,6 @@ The `ec2` object represents the configuration for a new deployment. Only two fie
 - `userdata`: (*Optional*) Userdata script that overrides the default userdata. 
 
 ## Contributing
-The below instructions are to be performed within Git Bash. Installation and setup of Git Bash can be found [here](https://git-scm.com/downloads/win)
-
 The below instructions are to be performed within Unix-style terminal. 
 
 It is recommended to use Git Bash if using a Windows machine. Installation and setup of Git Bash can be found [here](https://git-scm.com/downloads/win)
