@@ -90,7 +90,6 @@ The `ec2` object represents the configuration for a new deployment. Only two fie
 - `userdata`: (*Optional*) Userdata script that overrides the default userdata. 
 
 ## Contributing
-
 The below instructions are to be performed within Unix-style terminal. 
 
 It is recommended to use Git Bash if using a Windows machine. Installation and setup of Git Bash can be found [here](https://git-scm.com/downloads/win)
@@ -101,6 +100,7 @@ Clone the repository. Details on the cloning process can be found [here](https:/
 
 If the repository is already cloned, ensure it is up to date with the following commands,
 
+If you already have the repository cloned locally, execute the following commands to update your local repo:
 ```bash
 git checkout master
 git pull
@@ -172,6 +172,7 @@ git push tag v1.0.1
 
 Update the `CHANGELOG.md` with information about changes.
 
+
 ### Pull Request Checklist
 
 Ensure each item on the following checklist is complete before updating any tenant deployments with a new version of this module,
@@ -184,3 +185,4 @@ Ensure each item on the following checklist is complete before updating any tena
 - [] Increment `git tag` version
 - [] Update Changelog
 - [] Publish latest version on Confluence
+
