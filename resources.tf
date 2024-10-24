@@ -1,26 +1,3 @@
-resource "aws_key_pair" "ssh_key" {
-    count                        = local.conditions.provision_ssh_key ? 1 : 0
-
-    key_name                     = module.platform.prefixes.security.pem_key
-    public_key                   = tls_private_key.rsa[0].public_key_openssh
-}
-
-
-resource "tls_private_key" "rsa" {
-    count                        = local.conditions.provision_ssh_key ? 1 : 0
-
-    algorithm                    = local.ssh_key_defaults.algorithm
-    rsa_bits                     = local.ssh_key_defaults.bits
-}
-
-
-resource "local_file" "tf-key" {
-    count                       = local.conditions.provision_ssh_key ? 1 : 0
-
-    content                     = tls_private_key.rsa[0].private_key_pem
-    filename                    = "${path.root}/keys/${module.platform.prefixes.security.pem_key}"
-}
-
 # TODO: should be using security group module
 resource "aws_security_group" "remote_access_sg" {
     count                       = local.conditions.provision_sg ? 1 : 0

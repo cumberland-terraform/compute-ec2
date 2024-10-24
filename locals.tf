@@ -110,6 +110,10 @@ locals {
     }, module.platform.tags)
 
 
+    platform                        = merge({
+
+    }, var.platform)
+    
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                     = local.derived.is_rhel ? [
