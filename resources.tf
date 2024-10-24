@@ -1,3 +1,10 @@
+resource "aws_key_pair" "ssh_key" {
+    count                        = local.conditions.provision_ssh_key ? 1 : 0
+
+    key_name                     = module.platform.prefixes.security.pem_key
+    public_key                   = module.secret[0].secret.public_key_openssh
+}
+
 # TODO: should be using security group module
 resource "aws_security_group" "remote_access_sg" {
     count                       = local.conditions.provision_sg ? 1 : 0
