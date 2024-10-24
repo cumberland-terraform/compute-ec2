@@ -36,22 +36,22 @@ locals {
     }
     ## CALCULATED PROPERTIES
     #   Variables that change based on deployment configuration. 
-    kms_key                             = local.conditions.provision_kms_key ? (
-                                            module.kms[0].key
-                                        ) : !var.ec2.kms_key.aws_managed ? (
-                                            var.ec2.kms_key
-                                        ) :  merge({
-                                            # NOTE: the different objects on either side of the ? ternary operator
-                                            #       have to match type, so hacking the types together.
-                                            aws_managed = true
-                                            alias_arn   = join("/", [
-                                                module.platform.aws.arn.kms.key,
-                                                local.ec2_defaults.aws_managed_key_alias
-                                            ])
-                                        }, {
-                                            id          = data.aws_kms_key.this[0].id
-                                            arn         = data.aws_kms_key.this[0].arn
-                                        })
+    kms_key                         = local.conditions.provision_kms_key ? (
+                                        module.kms[0].key
+                                    ) : !var.ec2.kms_key.aws_managed ? (
+                                        var.ec2.kms_key
+                                    ) :  merge({
+                                        # NOTE: the different objects on either side of the ? ternary operator
+                                        #       have to match type, so hacking the types together.
+                                        aws_managed = true
+                                        alias_arn   = join("/", [
+                                            module.platform.aws.arn.kms.key,
+                                            local.ec2_defaults.aws_managed_key_alias
+                                        ])
+                                    }, {
+                                        id          = data.aws_kms_key.this[0].id
+                                        arn         = data.aws_kms_key.this[0].arn
+                                    })
 
     ssh_key_name                    = local.conditions.provision_ssh_key ? (
                                         aws_key_pair.ssh_key[0].key_name 

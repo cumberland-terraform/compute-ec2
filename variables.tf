@@ -47,6 +47,7 @@ variable "ec2" {
     type                          = optional(string, "t3.xlarge")
     ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
     vpc_security_group_ids        = optional(list(string), [])
+    suffix                        = optional(string, "") 
 
     # NOTE: `private_ip` is *only* to lock in an IP in case of redeployment!
     #       this argument is not required!
