@@ -5,42 +5,6 @@ resource "aws_key_pair" "ssh_key" {
     public_key                   = module.secret[0].secret.public_key_openssh
 }
 
-# TODO: should be using security group module
-resource "aws_security_group" "remote_access_sg" {
-    count                       = local.conditions.provision_sg ? 1 : 0
-
-    name                        = "${module.platform.prefixes.security.group}-EC2"
-    description                 = "${module.platform.prefixes.compute.ec2.instance} security group"
-    vpc_id                      = module.platform.network.vpc.id
-    tags                        = local.tags
-}
-
-# TODO: should be using security group module
-resource "aws_security_group_rule" "remote_access_ingress" {
-    count                       = local.conditions.provision_sg ? 1 : 0
-
-    description                 = "Restrict access to VPC CIDR block"
-    type                        = "ingress"
-    from_port                   = 0
-    to_port                     = 0
-    protocol                    = "-1"
-    cidr_blocks                 = [ module.platform.network.vpc.cidr_block ]
-    security_group_id           = aws_security_group.remote_access_sg[count.index].id
-} 
-
-# TODO: should be using security group module
-resource "aws_security_group_rule" "remote_access_egress" {
-    count                       = local.conditions.provision_sg ? 1 : 0
-
-    description                 = "Allow all outgoing traffic"
-    type                        = "egress"
-    from_port                   = 0
-    to_port                     = 0
-    protocol                    = "-1"
-    cidr_blocks                 = [ "0.0.0.0/0" ]
-    security_group_id           = aws_security_group.remote_access_sg[count.index].id
-}
-
 #tfsec:ignore:AVD-AWS-0131
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id

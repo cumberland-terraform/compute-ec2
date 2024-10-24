@@ -29,7 +29,6 @@ variable "ec2" {
       new_build                   = optional(bool, true)
       auto_backup                 = optional(bool, false) 
     })
-    additional_security_group_ids = optional(list(string), [])
     root_block_device             = optional(object({
       volume_type                 = string
       volume_size                 = number
@@ -47,7 +46,7 @@ variable "ec2" {
     iam_instance_profile          = optional(string, null)
     type                          = optional(string, "t3.xlarge")
     ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
-    suffix                        = optional(string, "") 
+    vpc_security_group_ids        = optional(list(string), [])
 
     # NOTE: `private_ip` is *only* to lock in an IP in case of redeployment!
     #       this argument is not required!

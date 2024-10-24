@@ -22,7 +22,7 @@ locals {
     conditions                      = {
         provision_ssh_key           = var.ec2.ssh_key_name == null
         provision_kms_key           = var.ec2.kms_key == null
-        provision_sg                = var.ec2.provision_sg
+        provision_sg                = var.ec2.additional_security_group_ids
         is_windows                  = strcontains(var.ec2.operating_system, "Windows")
         is_rhel7                    = strcontains(var.ec2.operating_system, "RHEL7")
         is_rhel8                    = strcontains(var.ec2.operating_system, "RHEL8")
@@ -57,17 +57,14 @@ locals {
                                         aws_key_pair.ssh_key[0].key_name 
                                     ) : var.ec2.ssh_key_name
 
-    baseline_vpc_sg_ids             = local.conditions.is_windows ? concat([
+    vpc_security_group_ids          = local.conditions.is_windows ? concat([
                                     # TODO: figure out windows security groups
                                     ], var.ec2.additional_security_group_ids) : concat([
                                         module.platform.network.security_groups.dmem.id, 
                                         module.platform.network.security_groups.rhel.id 
-                                    ], var.ec2.additional_security_group_ids)
-                                    
-    vpc_security_group_ids          = local.conditions.provision_sg ? concat(
-                                        [ aws_security_group.remote_access_sg[0].id ],
-                                        local.baseline_vpc_sg_ids
-                                    ) : local.baseline_vpc_sg_ids
+                                    ], local.conditions.provision_sg ? [
+                                        module.sg[0].security_group.id
+                                    ] : var.ec2.additional_security_group_ids)
 
     user_data_path                  = local.conditions.is_rhel7 ? (
                                         "${path.module}/user-data/rhel7/user-data.sh" 
@@ -93,6 +90,40 @@ locals {
                                         module.platform.prefixes.compute.ec2.profile
                                     ) : var.ec2.iam_instance_profile
 
+    suffix                          = join("-", [
+                                        module.platform.format.app.fourletterkey,
+                                        "EC2"
+                                    ])
+
+    secret                          = {
+        ssh_key                     = {
+            enabled                 = true
+            algorithm               = "RSA"
+            bits                    = 4096
+        }
+        suffix                      = join("-", [
+                                        local.suffix,
+                                        "PEM"
+                                    ])
+        kms_key                     = local.kms_key
+    }
+
+    sg                              = {
+        suffix                      = local.suffix
+        description                 = "EC2 Security Group for ${module.platform.format.app.fourletterkey}"
+        inbound_rules               = [{
+            self                    = true
+            description             = "Ingress from self"
+            from_port               = 0
+            to_port                 = 0
+            protocol                = -1
+        }]
+    }
+
+    kms                             = {
+        alias_suffix                = local.suffix
+    }
+
     tags                            = merge({
         Name                        = join("", [
                                         module.platform.prefixes.compute.ec2.hostname, 
@@ -113,7 +144,7 @@ locals {
     platform                        = merge({
 
     }, var.platform)
-    
+
     # These are extra filters that have to be added to the AMI data query to ensure the results
     #   returned are unique
     ami_filters                     = local.derived.is_rhel ? [
