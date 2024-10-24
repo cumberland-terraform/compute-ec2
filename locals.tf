@@ -36,7 +36,7 @@ locals {
     }
     ## CALCULATED PROPERTIES
     #   Variables that change based on deployment configuration. 
-    kms_key                             = local.conditions.provision_key ? (
+    kms_key                             = local.conditions.provision_kms_key ? (
                                             module.kms[0].key
                                         ) : !var.ec2.kms_key.aws_managed ? (
                                             var.ec2.kms_key
