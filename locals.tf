@@ -22,7 +22,7 @@ locals {
     conditions                      = {
         provision_ssh_key           = var.ec2.ssh_key_name == null
         provision_kms_key           = var.ec2.kms_key == null
-        provision_sg                = var.ec2.additional_security_group_ids
+        provision_sg                = length(var.ec2.vpc_security_group_ids) == 0
         is_windows                  = strcontains(var.ec2.operating_system, "Windows")
         is_rhel7                    = strcontains(var.ec2.operating_system, "RHEL7")
         is_rhel8                    = strcontains(var.ec2.operating_system, "RHEL8")
