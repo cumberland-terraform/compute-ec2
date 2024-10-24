@@ -57,7 +57,7 @@ variable "ec2" {
     user_data_replace_on_change   = optional(string, true)
 
     kms_key                       = optional(object({
-      aws_managed                 = boolean(bool, true)
+      aws_managed                 = optional(bool, true)
       id                          = optional(string, null)
       arn                         = optional(string, null)
       aias_arn                    = optional(string, null)
