@@ -83,9 +83,11 @@ The `ec2` object represents the configuration for a new deployment. Only two fie
 - `type`: (*Optional*) Type of the instance to deploy. Defaults to `t3.xlarge`. 
 - `ssh_key_name`: (*Optional*) Name of the AWS managed PEM to associate with the instance. If no key name is provided, a new SSH key will be generated and stored in the AWS secret manager with the appropriate platform prefix.
 - `suffix`: (*Optional*) Suffix to append to name of the instance. Defaults to a blank string.
-- `kms_key`: (*Optional*) KMS key object used to encrypt block devices. If no KMS key is provided, a new KMS key will be provisioned and access will be provided to the instance profile IAM role.
+- `kms_key`: (*Optional*) KMS key object used to encrypt block devices. If no KMS key is provided, a new KMS key will be provisioned and access will be provided to the instance profile IAM role. The AWS managed default `ebs` key can be used by specifying `aws_managed = true`. If `aws_managed` is set, all other arguments are ignored.
 	- `id`: Physical ID of the KMS key.
 	- `arn`: AWS ARN of the KMS key.
+	- `alias_arn`: AWS Alias ARN of the KMS key. 
+	- `aws_managed`: Boolean flag to use AWS managed key instead of CMK. This argument takes precedence over all others, i.e. if this argument is set to `true`, all the other arguments will be ignored.
 - `provision_sg`: (*Optional*) A boolean flag to signal to the module to provision a new security group for the instance that allows ingress from all addresses in the target VPC. Defaults to `false`, i.e. no security group is provisioned by default.
 - `userdata`: (*Optional*) Userdata script that overrides the default userdata. 
 

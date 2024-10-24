@@ -48,14 +48,20 @@ variable "ec2" {
     type                          = optional(string, "t3.xlarge")
     ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
     suffix                        = optional(string, "") 
-    kms_key                       = optional(object({
-      id                          = string
-      arn                         = string
-    }), null)
+
+    # NOTE: `private_ip` is *only* to lock in an IP in case of redeployment!
+    #       this argument is not required!
     private_ip                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
     user_data                     = optional(string, null)
     user_data_replace_on_change   = optional(string, true)
+
+    kms_key                       = optional(object({
+      aws_managed                 = boolean(bool, true)
+      id                          = optional(string, null)
+      arn                         = optional(string, null)
+      aias_arn                    = optional(string, null)
+    }), null)
   })
   
   validation {

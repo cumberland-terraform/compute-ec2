@@ -10,3 +10,9 @@ data "aws_ami" "latest" {
         }
     }
 }
+
+data "aws_kms_key" "this" {
+    count                   = var.ec2.kms_key.aws_managed ? 1 : 0
+
+    key_id                  = local.ec2_defaults.aws_managed_key_alias
+}
