@@ -59,12 +59,12 @@ locals {
 
     vpc_security_group_ids          = local.conditions.is_windows ? concat([
                                     # TODO: figure out windows security groups
-                                    ], var.ec2.additional_security_group_ids) : concat([
+                                    ], var.ec2.vpc_security_group_ids) : concat([
                                         module.platform.network.security_groups.dmem.id, 
                                         module.platform.network.security_groups.rhel.id 
                                     ], local.conditions.provision_sg ? [
                                         module.sg[0].security_group.id
-                                    ] : var.ec2.additional_security_group_ids)
+                                    ] : var.ec2.vpc_security_group_ids)
 
     user_data_path                  = local.conditions.is_rhel7 ? (
                                         "${path.module}/user-data/rhel7/user-data.sh" 
