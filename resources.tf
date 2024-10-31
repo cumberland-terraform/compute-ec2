@@ -30,7 +30,7 @@ resource "aws_instance" "instance" {
         #   a plan is run, so ignore until issue is resuled.
         # NOTE: We change the role as part of the build process, so we have to ignore
         #       changes to the instance profile!
-        ignore_changes          = [ tags, iam_instance_profile ]
+        ignore_changes          = [ tags, tags_all, iam_instance_profile ]
     }
     ## ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
     ##   bootstrap hydrates from metadata server!
