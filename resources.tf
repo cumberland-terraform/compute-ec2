@@ -5,13 +5,12 @@ resource "aws_key_pair" "ssh_key" {
     public_key                   = module.secret[0].secret.public_key_openssh
 }
 
-#tfsec:ignore:AVD-AWS-0131
 resource "aws_instance" "instance" {
     ami                         = data.aws_ami.latest.id
     associate_public_ip_address = local.ec2_defaults.associate_public_ip_address
     ebs_optimized               = local.ec2_defaults.ebs_optimized
     key_name                    = local.ssh_key_name
-    iam_instance_profile        = local.iam_instance_profile
+    iam_instance_profile        = var.ec2.iam_instance_profile
     instance_type               = var.ec2.type
     monitoring                  = local.ec2_defaults.monitoring
     private_ip                  = var.ec2.private_ip
@@ -28,41 +27,32 @@ resource "aws_instance" "instance" {
     lifecycle {
         # NOTE: TF is interpretting the tag calculations as a modification everytime 
         #   a plan is run, so ignore until issue is resuled.
-        # NOTE: We change the role as part of the build process, so we have to ignore
-        #       changes to the instance profile!
-        ignore_changes          = [ tags, tags_all, iam_instance_profile ]
+        ignore_changes          = [ tags, tags_all ]
     }
-    ## ENFORCING TOKENS BREAKS CURRENT BOOTSTRAPPING PROCESS! - Grant Moore, 2024/06/27
-    ##   bootstrap hydrates from metadata server!
-    
-    # metadata_options {
-    #     http_endpoint           = "enabled"
-    #     http_tokens             = "required"
-    # }
 
-    ## CURRENT AMI BUILD PROCESS BAKES DEVICE MAPPINGS INTO THE IMAGE
-    ##   ENFORCING BLOCK DEVICE MAPPINGS AT THE TF LEVEL CONFLICTS WITH
-    #   AMI MAPPINGS, FORCING REDEPLOYMENT! - Grant Moore, 2024/06/27
+    metadata_options {
+        http_endpoint           = "enabled"
+        http_tokens             = "required"
+    }
 
-    # root_block_device {
-    #     encrypted               = local.ec2_defaults.encrypted
-    #     kms_key_id              = local.kms_key.id
-    #     volume_size             = var.ec2.root_block_device.volume_size
-    #     volume_type             = var.ec2.root_block_device.volume_type
-    # }
+    root_block_device {
+        encrypted               = local.ec2_defaults.encrypted
+        kms_key_id              = local.kms_key.id
+        volume_size             = var.ec2.root_block_device.volume_size
+        volume_type             = var.ec2.root_block_device.volume_type
+    }
 
-    # dynamic "ebs_block_device" {
-    #     for_each                = { 
-    #                                 for index, device in var.ec2.ebs_block_devices:
-    #                                 index => device
-    #                             }
-    #     content {
-    #         encrypted           = local.ec2_defaults.encrypted
-    #         kms_key_id          = local.kms_key.id
-    #         tags                = local.tags
-    #         device_name         = ebs_block_device.value.device_name
-    #         volume_size         = ebs_block_device.value.volume_size
-    #         volume_type         = ebs_block_device.value.volume_type
-    #     }
-    # }
+    dynamic "ebs_block_device" {
+        for_each                = { for index, device in var.ec2.ebs_block_devices:
+                                        index => device }
+                                        
+        content {
+            encrypted           = local.ec2_defaults.encrypted
+            kms_key_id          = local.kms_key.id
+            tags                = local.tags
+            device_name         = ebs_block_device.value.device_name
+            volume_size         = ebs_block_device.value.volume_size
+            volume_type         = ebs_block_device.value.volume_type
+        }
+    }
 }

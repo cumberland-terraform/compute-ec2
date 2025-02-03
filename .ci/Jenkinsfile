@@ -4,8 +4,9 @@ pipeline {
 	}
 	
 	environment { 
-		BITBUCKET_KEY 				= credentials('mdtjenkinsbgit')
-		EMAIL_LIST 					= 'grant.moore@maryland.gov,aaron.ramirez@maryland.gov,aasritha.kilari@maryland.gov,'
+		ARTIFACTS 					= "bucket-name-goes-here"
+		VCS_KEY 					= credentials('vcs-key')
+		EMAIL_LIST 					= 'chinchalinchin@gmail.com'
 		MODULE_NAME 				= 'ec2'
 		OS_ARCH 					= 'amd64' 
 		TF_LOG 						= 'WARN'
@@ -13,18 +14,6 @@ pipeline {
 	}
 
 	stages {
-		stage('Credentials') {
-			steps {
-				sh 	'''
-					mkdir ~/.ssh
-					touch ~/.ssh/id_rsa
-					cat $(echo $BITBUCKET_KEY) > ~/.ssh/id_rsa
-					chmod 400 ~/.ssh/id_rsa
-					ssh-keyscan -t rsa source.mdthink.maryland.gov >> ~/.ssh/known_hosts
-				'''
-			}
-		}
-
 		stage ('Base Dependencies') {
 			steps{
 				sh '''
@@ -79,7 +68,7 @@ pipeline {
 				always {
 					sh '''
 						cat lint.json
-						aws s3 cp lint.json s3://s3-score1-mdt-eter-pipeline/${MODULE_NAME}/lint/${JOB_NAME}/${BUILD_NUMBER}_lint_$(date +%s).json
+						aws s3 cp lint.json s3://${ARTIFACTS}/${MODULE_NAME}/lint/${JOB_NAME}/${BUILD_NUMBER}_lint_$(date +%s).json
 					'''
 				}
 			}
@@ -99,7 +88,7 @@ pipeline {
 				always {
 					sh '''						
 						cat sec.json
-						aws s3 cp sec.json s3://s3-score1-mdt-eter-pipeline/${MODULE_NAME}/sec/${JOB_NAME}/${BUILD_NUMBER}_sec_$(date +%s).json
+						aws s3 cp sec.json s3://${ARTIFACTS}/${MODULE_NAME}/sec/${JOB_NAME}/${BUILD_NUMBER}_sec_$(date +%s).json
 					'''
 					}
 				}
@@ -121,7 +110,7 @@ pipeline {
 				always {
 					sh '''
 						cat test.json
-						aws s3 cp test.json s3://s3-score1-mdt-eter-pipeline/${MODULE_NAME}/test/${JOB_NAME}/${BUILD_NUMBER}_test_$(date +%s).json
+						aws s3 cp test.json s3://${ARTIFACTS}/${MODULE_NAME}/test/${JOB_NAME}/${BUILD_NUMBER}_test_$(date +%s).json
 					'''
 					}
 				}
@@ -136,12 +125,12 @@ pipeline {
 						-c .ci/.tfdocs_md.yml .
 					aws s3 cp \
 						tfdocs.md \
-						s3://s3-score1-mdt-eter-pipeline/${MODULE_NAME}/tfdocs/${BUILD_NUMBER}_tfdocs_$(date +%s).md
+						s3:/${ARTIFACTS}/${MODULE_NAME}/tfdocs/${BUILD_NUMBER}_tfdocs_$(date +%s).md
 					terraform-docs \
 						-c .ci/.tfdocs_json.yml .
 					aws s3 cp \
 						tfdocs.json \
-						s3://s3-score1-mdt-eter-pipeline/${MODULE_NAME}/tfdocs/${BUILD_NUMBER}_tfdocs_$(date +%s).json
+						s3://${ARTIFACTS}/${MODULE_NAME}/tfdocs/${BUILD_NUMBER}_tfdocs_$(date +%s).json
 				'''
 			}
 		}

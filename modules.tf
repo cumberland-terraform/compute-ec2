@@ -1,29 +1,38 @@
 module "platform" {
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-platform.git?ref=v1.0.20&depth=1"
-  
+  # META ARGUMENTS
+  source                = "github.com/cumberland-terraform/platform.git"
+  # PLATFORM ARGUMENTS
   platform              = local.platform
 }
 
 module "kms" {
+  # META ARGUMENTS
   count                 = local.conditions.provision_kms_key ? 1 : 0
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-core-security-kms.git?ref=v1.0.2&depth=1"
-
-  kms                   = local.kms
+  source                = "github.com/cumberland-terraform/security-kms"
+  # PLATFORM ARGUMENTS
   platform              = var.platform
+  # MODULE ARGUMENTS
+  kms                   = {
+      alias_suffix      = var.suffix
+  }
 }
 
 module "secret" {
+  # META ARGUMENTS
   count                 = local.conditions.provision_ssh_key ? 1 : 0
-  source                = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-core-security-sm.git?depth=1"
-
-  secret                = local.secret
+  source                = "github.com/cumberland-terraform/security-sm.git"
+  # PLATFORM ARGUMENTS
   platform              = var.platform
+  # MODULE ARGUMENTS
+  secret                = local.secret
 }
 
 module "sg"        {
-  count                   = local.conditions.provision_sg ? 1 : 0
-  source                  = "git::ssh://git@source.mdthink.maryland.gov:22/etm/mdt-eter-core-security-sg.git?depth=1"
-
-  sg                      = local.sg
-  platform                = local.platform
+  # META ARGUMENTS
+  count                 = local.conditions.provision_sg ? 1 : 0
+  source                = "github.com/cumberland-terraform/security-sg"
+  # PLATFORM ARGUMENTS
+  platform              = var.platform
+  # MODULE ARGUMENTS
+  sg                    = local.sg
 }
