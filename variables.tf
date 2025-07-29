@@ -34,9 +34,8 @@ variable "ec2" {
 
     iam_instance_profile          = optional(string, null)
     type                          = optional(string, "t3.xlarge")
-    ssh_key_name                  = optional(string, "MDTCoreUSEast1Virginia")
+    ssh_key_name                  = optional(string, "CumberlandCloudKey")
     vpc_security_group_ids        = optional(list(string), [])
-    suffix                        = optional(string, "") 
     private_ip                    = optional(string, null)
     provision_sg                  = optional(bool, false)  
     user_data                     = optional(string, null)
