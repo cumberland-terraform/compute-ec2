@@ -28,8 +28,8 @@ locals {
     #   Variables that change based on deployment configuration. 
     kms                             = local.conditions.provision_kms_key ? (
                                         module.kms[0].key
-                                    ) : !var.ec2.kms_key.aws_managed ? (
-                                        var.ec2.kms_key
+                                    ) : !var.kms.aws_managed ? (
+                                        var.kms
                                     ) : {
                                         aws_managed = true
                                         alias_arn   = join("/", [
