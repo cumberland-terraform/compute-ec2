@@ -60,10 +60,6 @@ locals {
                                         templatefile(local.user_data_path, local.user_data_config)
                                     ) : var.ec2.user_data 
 
-    os                              = local.conditions.is_windows ? (
-                                        "Windows" # inconsistent tagging conventions between OSs.
-                                    ) : var.ec2.operating_system
-
     name                            = upper(join("-", [module.platform.prefix,
                                         var.suffix
                                     ]))
