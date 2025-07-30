@@ -30,10 +30,11 @@ resource "aws_instance" "instance" {
         ignore_changes          = [ tags, tags_all ]
     }
 
-    metadata_options {
-        http_endpoint           = "enabled"
-        http_tokens             = "required"
-    }
+    # TODO: Parameterize this.
+    # metadata_options {
+    #     http_endpoint           = "enabled"
+    #     http_tokens             = "required"
+    # }
 
     root_block_device {
         encrypted               = local.ec2_defaults.encrypted
