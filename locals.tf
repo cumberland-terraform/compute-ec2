@@ -69,15 +69,15 @@ locals {
             enabled                 = true
             algorithm               = "RSA"
             bits                    = 4096
-            name                    = join("-", [
+            name                    = upper(join("-", [
                                         local.name,
                                         "PEM"
-                                    ])
+                                    ]))
         }
-        suffix                      = join("-", [
+        suffix                      = upper(join("-", [
                                         local.name,
                                         "PEM"
-                                    ])
+                                    ]))
         kms_key                     = local.kms
     }
 
