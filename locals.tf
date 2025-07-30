@@ -75,8 +75,8 @@ locals {
                                     ]))
         }
         suffix                      = upper(join("-", [
-                                        local.name,
-                                        "PEM"
+                                        "PEM",
+                                        var.suffix
                                     ]))
         kms_key                     = local.kms
     }
