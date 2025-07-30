@@ -69,6 +69,10 @@ locals {
             enabled                 = true
             algorithm               = "RSA"
             bits                    = 4096
+            name                    = join("-", [
+                                        local.name,
+                                        "PEM"
+                                    ])
         }
         suffix                      = join("-", [
                                         local.name,

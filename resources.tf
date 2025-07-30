@@ -1,7 +1,7 @@
 resource "aws_key_pair" "ssh_key" {
     count                        = local.conditions.provision_ssh_key ? 1 : 0
 
-    key_name                     = module.platform.prefixes.security.pem_key
+    key_name                     = local.secret.ssh_key.name
     public_key                   = module.secret[0].secret.public_key_openssh
 }
 
