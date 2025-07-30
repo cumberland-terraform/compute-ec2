@@ -37,7 +37,7 @@ resource "aws_instance" "instance" {
 
     root_block_device {
         encrypted               = local.ec2_defaults.encrypted
-        kms_key_id              = local.kms_key.id
+        kms_key_id              = local.kms.arn
         volume_size             = var.ec2.root_block_device.volume_size
         volume_type             = var.ec2.root_block_device.volume_type
     }
@@ -48,7 +48,7 @@ resource "aws_instance" "instance" {
                                         
         content {
             encrypted           = local.ec2_defaults.encrypted
-            kms_key_id          = local.kms_key.id
+            kms_key_id          = local.kms.arn
             tags                = local.tags
             device_name         = ebs_block_device.value.device_name
             volume_size         = ebs_block_device.value.volume_size
