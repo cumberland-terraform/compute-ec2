@@ -102,7 +102,7 @@ locals {
 
 
     platform                        = merge({
-        # TODO: module specific platform arguments
+        
     }, var.platform)
 
     ami_filters                     = [ {

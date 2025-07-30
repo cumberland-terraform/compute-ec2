@@ -3,6 +3,7 @@ variable "platform" {
   type                            = object({
     client                        = string 
     environment                   = string
+    subnet_type                   = optional(string, "PRIVATE")
   })
 }
 

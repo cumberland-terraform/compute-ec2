@@ -3,6 +3,10 @@ module "platform" {
   source                = "github.com/cumberland-terraform/platform.git"
   # PLATFORM ARGUMENTS
   platform              = local.platform
+  hydration             = {
+    vpc_query           = true
+    subnets_query       = true
+  }
 }
 
 module "kms" {
