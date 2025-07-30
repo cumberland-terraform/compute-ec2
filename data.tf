@@ -1,6 +1,6 @@
 data "aws_ami" "latest" {
     most_recent             = true
-    
+    owners                  = [ module.platform.aws.account_id ]
     dynamic "filter" {
         for_each            = local.ami_filters
 
