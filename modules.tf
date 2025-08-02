@@ -29,6 +29,7 @@ module "secret" {
   platform              = var.platform
   # MODULE ARGUMENTS
   secret                = local.secret
+  kms                   = local.kms
 }
 
 module "sg"        {
