@@ -18,7 +18,7 @@ locals {
     #   Configuration object containing boolean calculations that correspond
     #       to different deployment configurations.
     conditions                      = {
-        provision_ssh_key           = var.ec2.ssh_key_name == null
+        provision_ssh_key           = var.ec2.ssh_key_name == null && var.overrides.ssh_key
         provision_kms_key           = var.kms == null
         provision_sg                = length(var.ec2.vpc_security_group_ids) == 0
         use_default_userdata        = var.ec2.user_data == null

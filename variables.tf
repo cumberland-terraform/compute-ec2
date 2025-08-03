@@ -44,7 +44,6 @@ variable "ec2" {
   })
 }
 
-
 variable "kms" {
   type                            = object({
     aws_managed                   = optional(bool, true)
@@ -57,5 +56,15 @@ variable "kms" {
     id                            = null
     arn                           = null
     alias_arn                     = null
+  }
+}
+
+variable "overrides" {
+  description                     = "Boolean flags for switching off functionality"
+  type                            = object({
+    ssh_key                       = optional(bool, true)
+  })
+  default                         = {
+    ssh_key                       = true
   }
 }
