@@ -46,28 +46,18 @@ module "server" {
 }
 ```
 
-### Parameters
+`platform` is a parameter for *all* **Cumberland Cloud** modules. For more information about the `platform`, in particular the permitted values of the nested fields, see the ``platform`` module documentation. 
 
-The `ec2` object represents the configuration for a new deployment. Only one fields is absolutely required: `operating_system`. See previous section for example usage. The following bulleted list shows the hierarchy of allowed values for the `ec2` object fields and their purpose,
+## KMS Key Deployment Options
 
-- `operating_system`: (*Required*) Operating system for the instance. 
-- `tags`: (*Optional*) A map of tags to append to the resource in additional to the platform tags which are appended by default.
-- `vpc_security_group_ids`: (*Optional*) A list of IDs for the security groups into which the new instance will be deployed. **NOTE**: If no security groups are provided, a new security group will automatically be provisioned.
-- `root_block_device`: (*Optional*) Object that represents the configuration for the root block device. **NOTE**: this variable currently does nothing, as the root block device is baked into the AMI during the image build. It has been left in place for an eventual shift of workload to IaC.
-	- `volume_type`: (*Required*) Type of volume to be provisioned.
-	- `volume_size`: (*Required*) Size of the volume to be provisioned.
-- `ebs_block_devices`: (*Optional*) List of block devices to attach to the EC2. **NOTE**: this variable currently does nothing, as all  block device are baked into the AMI during the image build. It has been left in place for an eventual shift of workload to IaC.
-- `iam_instance_profile`: (*Optional*) The name of the instance profile for the instance to assume. 
-- `type`: (*Optional*) Type of the instance to deploy. Defaults to `t3.xlarge`. 
-- `ssh_key_name`: (*Optional*) Name of the AWS managed PEM to associate with the instance. If no key name is provided, a new SSH key will be generated and stored in the AWS secret manager with the appropriate platform prefix.
-- `provision_sg`: (*Optional*) A boolean flag to signal to the module to provision a new security group for the instance that allows ingress from all addresses in the target VPC. Defaults to `false`, i.e. no security group is provisioned by default.
-- `userdata`: (*Optional*) Userdata script that overrides the default userdata. 
+### 1: Module Provisioned Key
 
-The `kms` object represents the configuration the KMS key used to encrypt resources.
+If the `var.kms` is set to `null` (default value), the module will attempt to provision its own KMS key. This means the role assumed by Terraform in the `provider` 
 
-- `id`: Physical ID of the KMS key.
-- `arn`: AWS ARN of the KMS key.
-- `alias_arn`: AWS Alias ARN of the KMS key. 
-- `aws_managed`: Boolean flag to use AWS managed key instead of CMK. This argument takes precedence over all others, i.e. if this argument is set to `true`, all the other arguments will be ignored.
+### 2: User Provided Key
 
-The `suffix` variable is the naming suffix appended to all resources after the platform prefix,
+If the user of the module prefers to use a pre-existing customer managed key, the `id`, `arn` and `alias_arn` of the `var.kms` variable must be passed in. This will override the provisioning of the KMS key inside of the module.
+
+### 3: AWS Managed Key
+
+If the user of the module prefers to use an AWS managed KMS key, the `var.kms.aws_managed` property must be set to `true`.
